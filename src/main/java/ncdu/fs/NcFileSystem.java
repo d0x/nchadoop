@@ -1,10 +1,11 @@
-package ncdu;
+package ncdu.fs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 
 import lombok.Data;
+
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;

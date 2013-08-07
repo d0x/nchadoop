@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import ncdu.fs.NcFileSystem;
+
 public class Main
 {
 //	public static final String	namenode	= "hdfs://carolin:8020/hbase/steamGame";

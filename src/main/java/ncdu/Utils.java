@@ -2,6 +2,9 @@ package ncdu;
 
 import java.text.DecimalFormat;
 
+import ncdu.fs.File;
+import ncdu.fs.Folder;
+
 public class Utils
 {
 

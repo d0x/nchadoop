@@ -1,4 +1,4 @@
-package ncdu;
+package ncdu.fs;
 
 import lombok.Data;
 
