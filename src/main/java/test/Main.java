@@ -3,12 +3,12 @@ package test;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 import lombok.extern.slf4j.Slf4j;
+import ncdu.Utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -58,17 +58,8 @@ public class Main
 				else
 					System.out.print(" ");
 			}
-			System.out.println("] " + readableFileSize(file.getLen()) + " " + file.getPath());
+			System.out.println("] " + Utils.readableFileSize(file.getLen()) + " " + file.getPath());
 		}
-	}
-
-	public static String readableFileSize(final long size)
-	{
-		if (size <= 0)
-			return "0";
-		final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-		final int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
-		return new DecimalFormat("#,##0.0").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
 
 }
