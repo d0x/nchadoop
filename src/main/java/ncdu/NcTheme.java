@@ -5,8 +5,8 @@ import com.googlecode.lanterna.terminal.Terminal.Color;
 
 public class NcTheme extends Theme
 {
-	private static final Definition	DEFAULT		= new Definition(Color.CYAN, Color.BLUE, true);
-	private static final Definition	SELECTED	= new Definition(Color.CYAN, Color.BLUE, true);
+	private static final Definition DEFAULT = new Definition(Color.BLACK, Color.WHITE, false);
+    private static final Definition SELECTED = new Definition(Color.WHITE, Color.BLUE, true);
 
 	public NcTheme()
 	{

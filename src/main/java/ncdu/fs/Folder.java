@@ -12,7 +12,7 @@ import org.apache.hadoop.fs.Path;
 
 @Slf4j
 @Data
-public class Folder
+public class Folder 
 {
 	private final Folder	parent;
 	private final String	name;
@@ -36,8 +36,8 @@ public class Folder
 
 	public void add(final LocatedFileStatus file)
 	{
-		System.out.println();
-		System.out.println("---------- " + file.getPath() + " --------------");
+//		System.out.println();
+//		System.out.println("---------- " + file.getPath() + " --------------");
 
 		final Path folders;
 
@@ -60,7 +60,7 @@ public class Folder
 
 		if (file.isFile())
 		{
-			System.out.println("Increase size for file: " + file.getPath());
+//			System.out.println("Increase size for file: " + file.getPath());
 			increaseParentFolderSize(folder, file.getLen());
 
 			folder.files.add(new File(folder, file.getPath().getName(), file.getLen()));
@@ -69,7 +69,7 @@ public class Folder
 
 	private void increaseParentFolderSize(final Folder folder, final long sizeToAdd)
 	{
-		System.out.println("\tAdding " + sizeToAdd + " to " + folder.size + " in " + folder);
+//		System.out.println("\tAdding " + sizeToAdd + " to " + folder.size + " in " + folder);
 
 		folder.size += sizeToAdd;
 
@@ -99,7 +99,7 @@ public class Folder
 
 		final Folder newChildFolder = new Folder(parent, name);
 
-		System.out.println("Add folder " + name);
+//		System.out.println("Add folder " + name);
 
 		parent.folders.add(newChildFolder);
 
