@@ -3,6 +3,7 @@ package test;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,57 +16,59 @@ import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
 
-import com.googlecode.lanterna.TerminalFacade;
-import com.googlecode.lanterna.gui.Border;
-import com.googlecode.lanterna.gui.Theme;
-import com.googlecode.lanterna.gui.Border.Bevel;
-import com.googlecode.lanterna.gui.GUIScreen;
-import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.terminal.Terminal.Color;
-
 @Slf4j
 public class Main
 {
+//	public static final String namenode = "hdfs://192.168.1.218:8020";
+	public static final String	namenode	= "hdfs://carolin:8020";
 
-	public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException
+	public static void main(final String[] args) throws IOException, InterruptedException, URISyntaxException
 	{
-		FileSystem fileSystem = FileSystem.get(new URI("hdfs://192.168.1.218:8020"), new Configuration(), "hdfs");
+		final FileSystem fileSystem = FileSystem.get(new URI(namenode), new Configuration(), "hdfs");
 
-		RemoteIterator<LocatedFileStatus> listFiles = fileSystem.listFiles(new Path("/"), true);
+		final RemoteIterator<LocatedFileStatus> listFiles = fileSystem.listFiles(new Path("/"), true);
 
-		ArrayList<LocatedFileStatus> arrayList = new ArrayList<>();
+		final ArrayList<LocatedFileStatus> arrayList = new ArrayList<>();
 
 		while (listFiles.hasNext())
 		{
-			LocatedFileStatus file = listFiles.next();
+			final LocatedFileStatus file = listFiles.next();
 			arrayList.add(file);
 		}
 
 		Collections.sort(arrayList, new Comparator<LocatedFileStatus>() {
 
 			@Override
-			public int compare(LocatedFileStatus o1, LocatedFileStatus o2)
+			public int compare(final LocatedFileStatus o1, final LocatedFileStatus o2)
 			{
 				return (int) (o2.getLen() - o1.getLen());
 			}
 		});
 
-		
-		long max = arrayList.get(0).getLen();
-		
-		for (LocatedFileStatus file : arrayList)
+		final long max = arrayList.get(0).getLen();
+
+		for (final LocatedFileStatus file : arrayList)
 		{
-			long dashes = Math.round((double)file.getLen()/max*100/10);
+			final long dashes = Math.round((double) file.getLen() / max * 100 / 10);
 			System.out.print("[");
 			for (int i = 0; i < 10; i++)
 			{
-				if(i<dashes)
+				if (i < dashes)
 					System.out.print("-");
 				else
 					System.out.print(" ");
 			}
-			System.out.println("] " + file.getPath());
+			System.out.println("] " + readableFileSize(file.getLen()) + " " + file.getPath());
 		}
+	}
+
+	public static String readableFileSize(final long size)
+	{
+		if (size <= 0)
+			return "0";
+		final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+		final int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+		return new DecimalFormat("#,##0.0").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
 
 }
