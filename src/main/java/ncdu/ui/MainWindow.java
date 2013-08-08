@@ -1,6 +1,6 @@
 package ncdu.ui;
 
-import ncdu.fs.Folder;
+import ncdu.fs.Directory;
 import ncdu.ui.components.SingleWindowUi;
 
 import com.googlecode.lanterna.gui.Component.Alignment;
@@ -23,7 +23,7 @@ public class MainWindow extends SingleWindowUi
 	private Label				header	= new Label("nchdfs 1.0.0-SNAPSHOT ~ Use the arrow keys to navigate, press ? for help", true);
 	private Label				footer	= new Label("Total Disk usage: 26 GB", true);
 
-	private Folder				currentFolder;
+	private Directory				currentFolder;
 
 	public MainWindow()
 	{
@@ -42,8 +42,8 @@ public class MainWindow extends SingleWindowUi
 	private void refresh()
 	{
 		this.items.setCurrent(this.currentFolder);
-		this.items.addFolder(this, this.currentFolder.getFolders());
-		this.items.addFile(this, this.currentFolder.getFiles());
+		this.items.addFolder(this, this.currentFolder.getDirectories());
+//		this.items.addFile(this, this.currentFolder.getFiles());
 
 		this.items.refresh(this);
 	}
@@ -78,7 +78,7 @@ public class MainWindow extends SingleWindowUi
 		super.onKeyPressed(key);
 	}
 
-	public void changeFolder(final Folder folder)
+	public void changeFolder(final Directory folder)
 	{
 		this.currentFolder = folder;
 
@@ -87,7 +87,7 @@ public class MainWindow extends SingleWindowUi
 		refresh();
 	}
 
-	private String absolutFolderName(final Folder folder)
+	private String absolutFolderName(final Directory folder)
 	{
 		if (folder.getParent() != null)
 		{

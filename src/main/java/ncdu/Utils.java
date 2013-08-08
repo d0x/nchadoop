@@ -3,43 +3,43 @@ package ncdu;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 
-import org.apache.commons.lang.StringUtils;
+import ncdu.fs.Directory;
 
-import ncdu.fs.File;
-import ncdu.fs.Folder;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.fs.LocatedFileStatus;
 
 public class Utils
 {
 
-	public static void displayFolder(final Folder rootFolder)
+	public static void displayFolder(final Directory rootFolder)
 	{
 		displayFolder(0, rootFolder);
 	}
 
-	private static void displayFolder(final int depth, final Folder rootFolder)
+	private static void displayFolder(final int depth, final Directory rootFolder)
 	{
 		System.out.print(readableFileSize(rootFolder.getSize()));
 
 		for (int i = 0; i < depth; i++)
 		{
-			System.out.print("\t");
+			System.out.print("  ");
 		}
 
 		System.out.println(rootFolder.getName());
 
-		for (final Folder folder : rootFolder.getFolders())
+		for (final Directory folder : rootFolder.getDirectories())
 		{
 			displayFolder(depth + 1, folder);
 		}
 
-		for (final File file : rootFolder.getFiles())
+		for (final LocatedFileStatus file : rootFolder.getFiles())
 		{
 			for (int i = 0; i < depth + 1; i++)
 			{
-				System.out.print("\t");
+				System.out.print("  ");
 			}
 
-			System.out.println("+" + file);
+			System.out.println("+" + file.getPath().getName() + " [" + file.getOwner() + "]");
 		}
 	}
 

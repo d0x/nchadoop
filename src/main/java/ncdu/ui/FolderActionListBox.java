@@ -6,8 +6,9 @@ import java.util.List;
 
 import lombok.Data;
 import ncdu.Utils;
-import ncdu.fs.File;
-import ncdu.fs.Folder;
+import ncdu.fs.Directory;
+
+import org.apache.hadoop.fs.LocalFileSystem;
 
 import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.component.ActionListBox;
@@ -17,14 +18,14 @@ import com.googlecode.lanterna.gui.layout.LinearLayout;
 
 public class FolderActionListBox extends Panel
 {
-	private static final String	BLANK	= "                                                                                                                                                           ";
+	private static final String		BLANK	= "                                                                                                                                                           ";
 
-	private List<Folder>		folders;
-	private List<File>			files;
-	private Folder				currentfolder;
+	private List<Directory>			folders;
+	private List<LocalFileSystem>	files;
+	private Directory				currentfolder;
 
-	private Label				label	= new Label();
-	private ActionListBox		listBox	= new ActionListBox();
+	private Label					label	= new Label();
+	private ActionListBox			listBox	= new ActionListBox();
 
 	public FolderActionListBox()
 	{
@@ -44,22 +45,22 @@ public class FolderActionListBox extends Panel
 		addComponent(this.listBox, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
 	}
 
-	public void addFolder(final MainWindow ncWindow, final List<Folder> folders)
+	public void addFolder(final MainWindow ncWindow, final List<Directory> folders)
 	{
 		this.folders = folders;
 	}
 
-	public void addFile(final MainWindow ncWindow, final List<File> files)
+	public void addFile(final MainWindow ncWindow, final List<LocalFileSystem> files)
 	{
 		this.files = files;
-		for (final File file : files)
+		for (final LocalFileSystem file : files)
 		{
-			final String name = "/" + file.getName();
-			final long size = file.getSize();
-			final long largest = file.getParent() != null ? file.getParent().getSize() : 0;
-
-			final String formatted = Utils.format(name, size, largest);
-			this.listBox.addAction(formatted, null);
+//			final String name = "/" + file.getName();
+//			final long size = file.getSize();
+//			final long largest = 0;// file.getParent() != null ? file.getParent().getSize() : 0;
+//
+//			final String formatted = Utils.format(name, size, largest);
+//			this.listBox.addAction(formatted, null);
 		}
 	}
 
@@ -86,19 +87,19 @@ public class FolderActionListBox extends Panel
 		final List<Displayable> items = new ArrayList<>();
 
 		long max = 0;
-		for (final Folder folder : this.folders)
+		for (final Directory folder : this.folders)
 		{
 			items.add(new Displayable("/" + folder.getName(), folder.getSize(), new ChangeFolder(folder, ncWindow)));
 			if (max < folder.getSize())
 				max = folder.getSize();
 		}
 
-		for (final File file : this.files)
-		{
-			items.add(new Displayable(file.getName(), file.getSize(), null));
-			if (max < file.getSize())
-				max = file.getSize();
-		}
+//		for (final File file : this.files)
+//		{
+//			items.add(new Displayable(file.getName(), file.getSize(), null));
+//			if (max < file.getSize())
+//				max = file.getSize();
+//		}
 
 		for (final Displayable displayable : items)
 		{
@@ -118,7 +119,7 @@ public class FolderActionListBox extends Panel
 		}
 	}
 
-	public void setCurrent(final Folder currentFolder)
+	public void setCurrent(final Directory currentFolder)
 	{
 		this.currentfolder = currentFolder;
 
