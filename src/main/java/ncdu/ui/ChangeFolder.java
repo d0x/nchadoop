@@ -1,4 +1,4 @@
-package ncdu;
+package ncdu.ui;
 
 import ncdu.fs.Folder;
 
@@ -8,9 +8,9 @@ public class ChangeFolder implements Action
 {
 
 	private Folder		folder;
-	private NcWindow	ncWindow;
+	private MainWindow	ncWindow;
 
-	public ChangeFolder(Folder folder, NcWindow ncWindow)
+	public ChangeFolder(Folder folder, MainWindow ncWindow)
 	{
 		this.folder = folder;
 		this.ncWindow = ncWindow;

@@ -6,7 +6,6 @@ import java.net.URI;
 
 import lombok.Data;
 
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
@@ -20,6 +19,9 @@ public class NcFileSystem
 	private URI			searchUri;
 
 	private Folder		searchRoot;
+
+	private long		totalDiskUsage;
+	private long		totalItems;
 
 	public NcFileSystem(final URI namenode, final String user) throws IOException, InterruptedException
 	{
@@ -35,6 +37,7 @@ public class NcFileSystem
 	 */
 	public void refresh() throws FileNotFoundException, IOException
 	{
+		this.totalItems = 0;
 		final RemoteIterator<LocatedFileStatus> fileList = readAllFiles();
 
 		this.searchRoot = new Folder(null, this.searchUri.toString());
@@ -42,7 +45,8 @@ public class NcFileSystem
 		while (fileList.hasNext())
 		{
 			final LocatedFileStatus file = fileList.next();
-
+			this.totalDiskUsage += file.getLen();
+			this.totalItems++;
 			this.searchRoot.add(file);
 		}
 
