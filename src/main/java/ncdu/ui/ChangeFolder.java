@@ -10,7 +10,7 @@ public class ChangeFolder implements Action
 	private Folder		folder;
 	private MainWindow	ncWindow;
 
-	public ChangeFolder(Folder folder, MainWindow ncWindow)
+	public ChangeFolder(final Folder folder, final MainWindow ncWindow)
 	{
 		this.folder = folder;
 		this.ncWindow = ncWindow;
@@ -19,7 +19,7 @@ public class ChangeFolder implements Action
 	@Override
 	public void doAction()
 	{
-		ncWindow.changeFolder(folder);
+		this.ncWindow.changeFolder(this.folder);
 	}
 
 }
