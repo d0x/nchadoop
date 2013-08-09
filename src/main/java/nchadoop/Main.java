@@ -1,12 +1,12 @@
-package ncdu;
+package nchadoop;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import ncdu.fs.HdfsScanner;
-import ncdu.fs.SearchRoot;
-import ncdu.ui.MainWindow;
+import nchadoop.fs.HdfsScanner;
+import nchadoop.fs.SearchRoot;
+import nchadoop.ui.MainWindow;
 
 public class Main
 {

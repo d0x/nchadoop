@@ -1,7 +1,7 @@
-package ncdu.ui.actions;
+package nchadoop.ui.actions;
 
-import ncdu.fs.Directory;
-import ncdu.ui.MainWindow;
+import nchadoop.fs.Directory;
+import nchadoop.ui.MainWindow;
 
 import com.googlecode.lanterna.gui.Action;
 

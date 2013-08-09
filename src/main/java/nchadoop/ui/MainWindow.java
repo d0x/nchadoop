@@ -1,8 +1,8 @@
-package ncdu.ui;
+package nchadoop.ui;
 
-import ncdu.fs.Directory;
-import ncdu.fs.SearchRoot;
-import ncdu.ui.components.SingleWindowUi;
+import nchadoop.fs.Directory;
+import nchadoop.fs.SearchRoot;
+import nchadoop.ui.components.SingleWindowUi;
 
 import com.googlecode.lanterna.gui.Component.Alignment;
 import com.googlecode.lanterna.gui.GUIScreen;

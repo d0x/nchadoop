@@ -1,4 +1,4 @@
-package ncdu.fs;
+package nchadoop.fs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

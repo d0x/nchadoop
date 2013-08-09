@@ -1,4 +1,4 @@
-package ncdu.ui.components;
+package nchadoop.ui.components;
 
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.gui.Border;

@@ -1,11 +1,11 @@
-package ncdu.ui.listbox;
+package nchadoop.ui.listbox;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ncdu.fs.Directory;
-import ncdu.ui.MainWindow;
+import nchadoop.fs.Directory;
+import nchadoop.ui.MainWindow;
 
 import org.apache.hadoop.fs.LocatedFileStatus;
 

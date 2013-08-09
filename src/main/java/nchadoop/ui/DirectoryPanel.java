@@ -1,7 +1,7 @@
-package ncdu.ui;
+package nchadoop.ui;
 
-import ncdu.fs.Directory;
-import ncdu.ui.listbox.DirectoryListBox;
+import nchadoop.fs.Directory;
+import nchadoop.ui.listbox.DirectoryListBox;
 
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.LinearLayout;

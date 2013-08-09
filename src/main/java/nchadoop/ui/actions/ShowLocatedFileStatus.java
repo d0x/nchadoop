@@ -1,4 +1,4 @@
-package ncdu.ui.actions;
+package nchadoop.ui.actions;
 
 import lombok.Data;
 

@@ -1,11 +1,11 @@
-package ncdu.ui.listbox;
+package nchadoop.ui.listbox;
 
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 
 import lombok.Data;
-import ncdu.fs.Directory;
-import ncdu.ui.MainWindow;
+import nchadoop.fs.Directory;
+import nchadoop.ui.MainWindow;
 
 import org.apache.commons.lang.StringUtils;
 

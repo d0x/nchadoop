@@ -1,8 +1,8 @@
-package ncdu.ui;
+package nchadoop.ui;
 
 import java.text.MessageFormat;
 
-import ncdu.fs.Directory;
+import nchadoop.fs.Directory;
 
 import com.googlecode.lanterna.gui.component.Label;
 

@@ -1,4 +1,4 @@
-package ncdu.fs;
+package nchadoop.fs;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

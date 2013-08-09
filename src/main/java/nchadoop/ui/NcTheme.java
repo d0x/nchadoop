@@ -1,4 +1,4 @@
-package ncdu.ui;
+package nchadoop.ui;
 
 import com.googlecode.lanterna.gui.Theme;
 import com.googlecode.lanterna.terminal.Terminal.Color;

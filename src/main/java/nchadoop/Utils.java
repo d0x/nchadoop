@@ -1,8 +1,8 @@
-package ncdu;
+package nchadoop;
 
 import java.text.DecimalFormat;
 
-import ncdu.fs.Directory;
+import nchadoop.fs.Directory;
 
 import org.apache.hadoop.fs.LocatedFileStatus;
 
