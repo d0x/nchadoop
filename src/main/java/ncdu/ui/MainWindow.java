@@ -1,6 +1,13 @@
 package ncdu.ui;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import ncdu.Main;
 import ncdu.fs.Directory;
+import ncdu.fs.HdfsScanner;
+import ncdu.fs.SearchRoot;
 import ncdu.ui.components.SingleWindowUi;
 
 import com.googlecode.lanterna.gui.Component.Alignment;
@@ -13,17 +20,10 @@ import com.googlecode.lanterna.input.Key;
 
 public class MainWindow extends SingleWindowUi
 {
-	public static void main(final String[] args)
-	{
-		new MainWindow();
-	}
-
 	private FolderActionListBox	items	= new FolderActionListBox();
 
 	private Label				header	= new Label("nchdfs 1.0.0-SNAPSHOT ~ Use the arrow keys to navigate, press ? for help", true);
 	private Label				footer	= new Label("Total Disk usage: 26 GB", true);
-
-	private Directory				currentFolder;
 
 	public MainWindow()
 	{
@@ -33,19 +33,15 @@ public class MainWindow extends SingleWindowUi
 		this.contentPane.addComponent(this.header, BorderLayout.TOP);
 		this.contentPane.addComponent(this.items, BorderLayout.CENTER);
 		this.contentPane.addComponent(this.footer, BorderLayout.BOTTOM);
+	}
+
+	public void refresh(SearchRoot searchRoot)
+	{
+		this.items.refresh(this, searchRoot);
 
 		// Those have to be exectued at last
 		addComponent(this.contentPane, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
 		this.gui.showWindow(this, GUIScreen.Position.FULL_SCREEN);
-	}
-
-	private void refresh()
-	{
-		this.items.setCurrent(this.currentFolder);
-		this.items.addFolder(this, this.currentFolder.getDirectories());
-//		this.items.addFile(this, this.currentFolder.getFiles());
-
-		this.items.refresh(this);
 	}
 
 	@Override
@@ -78,13 +74,10 @@ public class MainWindow extends SingleWindowUi
 		super.onKeyPressed(key);
 	}
 
-	public void changeFolder(final Directory folder)
+	public void changeFolder(final Directory directory)
 	{
-		this.currentFolder = folder;
-
-		this.header.setText("Current Path: " + absolutFolderName(folder));
-
-		refresh();
+		header.setText("Current Path: " + absolutFolderName(directory));
+		items.refresh(this, directory);
 	}
 
 	private String absolutFolderName(final Directory folder)

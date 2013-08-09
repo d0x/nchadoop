@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import com.google.common.base.Stopwatch;
 
 import ncdu.fs.HdfsScanner;
+import ncdu.fs.SearchRoot;
+import ncdu.ui.MainWindow;
 
 public class Main
 {
@@ -15,13 +17,10 @@ public class Main
 
 	public static void main(final String[] args) throws URISyntaxException, IOException, InterruptedException
 	{
-		final URI uri = new URI(namenode);
-
-		final HdfsScanner fileSystemScanner = new HdfsScanner(uri, "hdfs");
-		fileSystemScanner.refresh(uri);
-
-		Utils.displayFolder(fileSystemScanner.getSearchRoot());
-		
-		System.out.println(fileSystemScanner.getSearchRoot());
+		URI uri = new URI(Main.namenode);
+		MainWindow mainWindow = new MainWindow();
+		HdfsScanner hdfsScanner = new HdfsScanner(uri, "hdfs");
+		SearchRoot searchRoot = hdfsScanner.refresh(uri);
+		mainWindow.refresh(searchRoot);
 	}
 }

@@ -17,18 +17,16 @@ public class HdfsScanner
 {
 	private final FileSystem	fileSystem;
 
-	private SearchRoot			searchRoot;
-
 	public HdfsScanner(final URI namenode, final String user) throws IOException, InterruptedException
 	{
 		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
 	}
 
-	public void refresh(URI searchUri) throws FileNotFoundException, IOException
+	public SearchRoot refresh(URI searchUri) throws FileNotFoundException, IOException
 	{
 		final RemoteIterator<LocatedFileStatus> fileList = this.fileSystem.listFiles(new Path(searchUri), true);
 
-		this.searchRoot = new SearchRoot(searchUri.toString());
+		SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
 		while (fileList.hasNext())
 		{
@@ -36,6 +34,8 @@ public class HdfsScanner
 
 			addFile(searchRoot, file);
 		}
+		
+		return searchRoot;
 	}
 
 	public void addFile(SearchRoot searchRoot, final LocatedFileStatus file)
