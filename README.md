@@ -1,9 +1,9 @@
-# This is my README# nchadoop is a *ncdu* like file browser to identify wasted disc space
+# nchadoop is a *ncdu* like file browser to identify wasted disc space
 
 It can scans folders on hdfs and procudes are cli like this:
 
 ```
---- /user/christian/thrift/
+ --- /user/christian/thrift/
                         /..
    20.9MiB [##########]  libtestgencpp.a
     6.5MiB [###       ]  DebugProtoTest_types.o
