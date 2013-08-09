@@ -8,14 +8,18 @@ import lombok.Data;
 import ncdu.Utils;
 import ncdu.fs.Directory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 
 import com.googlecode.lanterna.gui.Action;
+import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.component.ActionListBox;
 import com.googlecode.lanterna.gui.component.Label;
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.LinearLayout;
+import com.googlecode.lanterna.terminal.TerminalPosition;
+import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class FolderActionListBox extends Panel
 {
@@ -24,41 +28,27 @@ public class FolderActionListBox extends Panel
 	private Directory			currentfolder;
 
 	private Label				label	= new Label();
-	private ActionListBox		listBox	= new ActionListBox();
+	private ActionListBox		listBox	= new ActionListBox() {
+											protected void printItem(TextGraphics graphics, int x, int y, int index)
+											{
+												String asText = createItemString(index);
+
+												asText = StringUtils.abbreviate(asText, graphics.getWidth());
+												asText += BLANK;
+												asText = asText.substring(0, graphics.getWidth());
+
+												graphics.drawString(x, y, asText);
+
+											}
+										};
 
 	public FolderActionListBox()
 	{
 		this.label.setText(" --- /home/christian/");
 		this.label.setAlignment(Alignment.LEFT_CENTER);
 
-		this.listBox.addAction("foo", new Action() {
-
-			@Override
-			public void doAction()
-			{
-
-			}
-		});
-
 		addComponent(this.label, LinearLayout.MAXIMIZES_HORIZONTALLY);
 		addComponent(this.listBox, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
-	}
-
-	public void addFolder(final MainWindow ncWindow, final List<Directory> folders)
-	{
-	}
-
-	public void addFile(final MainWindow ncWindow, final List<LocatedFileStatus> files)
-	{
-		for (final LocatedFileStatus file : files)
-		{
-			final String name = "/" + file.getPath().getName();
-			final long size = file.getLen();
-			final long largest = 0;// file.getParent() != null ? file.getParent().getSize() : 0;
-
-			final String formatted = Utils.format(name, size, largest);
-			this.listBox.addAction(formatted, null);
-		}
 	}
 
 	@Data
@@ -120,12 +110,12 @@ public class FolderActionListBox extends Panel
 
 		if (this.currentfolder.getParent() != null)
 		{
-			this.listBox.addAction("                       /.." + BLANK, new ChangeFolder(this.currentfolder.getParent(), ncWindow));
+			this.listBox.addAction("                       /..", new ChangeFolder(this.currentfolder.getParent(), ncWindow));
 		}
 
 		for (final Displayable displayable : items)
 		{
-			this.listBox.addAction(Utils.format(displayable.getName(), displayable.getSize(), displayable.getLargest()) + BLANK, displayable.getAction());
+			this.listBox.addAction(Utils.format(displayable.getName(), displayable.getSize(), displayable.getLargest()), displayable.getAction());
 		}
 
 		if (listBox.getNrOfItems() > 1)

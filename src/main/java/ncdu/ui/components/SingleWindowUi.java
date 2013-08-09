@@ -3,10 +3,14 @@ package ncdu.ui.components;
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.gui.Border;
 import com.googlecode.lanterna.gui.GUIScreen;
+import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.Window;
+import com.googlecode.lanterna.gui.Theme.Category;
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.BorderLayout;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.terminal.TerminalPosition;
+import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class SingleWindowUi extends Window
 {
@@ -30,7 +34,7 @@ public class SingleWindowUi extends Window
 //		this.contentPane.setBorder(new Border.Invisible());
 		this.contentPane.setLayoutManager(new BorderLayout());
 	}
-
+	
 	@Override
 	public void close()
 	{

@@ -1,12 +1,7 @@
 package ncdu.ui;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import ncdu.Main;
+import ncdu.Utils;
 import ncdu.fs.Directory;
-import ncdu.fs.HdfsScanner;
 import ncdu.fs.SearchRoot;
 import ncdu.ui.components.SingleWindowUi;
 
@@ -20,10 +15,9 @@ import com.googlecode.lanterna.input.Key;
 
 public class MainWindow extends SingleWindowUi
 {
-	private FolderActionListBox	items	= new FolderActionListBox();
-
 	private Label				header	= new Label("nchdfs 1.0.0-SNAPSHOT ~ Use the arrow keys to navigate, press ? for help", true);
-	private Label				footer	= new Label("Total Disk usage: 26 GB", true);
+	private FolderActionListBox	items	= new FolderActionListBox();
+	private Label				footer	= new Label("Loading...", true);
 
 	public MainWindow()
 	{
@@ -39,6 +33,8 @@ public class MainWindow extends SingleWindowUi
 	{
 		this.items.refresh(this, searchRoot);
 
+		footer.setText("Total Disk usage: " + Utils.readableFileSize(searchRoot.getTotalDiskUsage()) + " in " + searchRoot.getTotalFiles() +" Files");
+		
 		// Those have to be exectued at last
 		addComponent(this.contentPane, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
 		this.gui.showWindow(this, GUIScreen.Position.FULL_SCREEN);
