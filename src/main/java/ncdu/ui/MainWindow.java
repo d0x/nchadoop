@@ -14,7 +14,7 @@ import com.googlecode.lanterna.input.Key;
 public class MainWindow extends SingleWindowUi
 {
 	private HeaderLabel			header	= new HeaderLabel();
-	private FolderActionListBox	items	= new FolderActionListBox();
+	private DirectoryPanel	items	= new DirectoryPanel();
 	private FooterLabel			footer	= new FooterLabel();
 
 	public MainWindow()
