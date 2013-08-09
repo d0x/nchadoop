@@ -1,13 +1,14 @@
-package ncdu.ui;
+package ncdu.ui.actions;
 
 import ncdu.fs.Directory;
+import ncdu.ui.MainWindow;
 
 import com.googlecode.lanterna.gui.Action;
 
 public class ChangeFolder implements Action
 {
 
-	private Directory		folder;
+	private Directory	folder;
 	private MainWindow	ncWindow;
 
 	public ChangeFolder(final Directory folder, final MainWindow ncWindow)

@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.LocatedFileStatus;
-import org.apache.hadoop.fs.Path;
 
-@Slf4j
 @Data
 public class Directory
 {
@@ -22,30 +19,45 @@ public class Directory
 
 	protected long					size		= 0;
 
+	public boolean isRoot()
+	{
+		return getParent() == null;
+	}
+
+	public String absolutDirectoryName()
+	{
+		if (isRoot())
+		{
+			return "/";
+		}
+
+		return getParent().absolutDirectoryName() + this.name + "/";
+	}
+
 	public Directory findDirectoryByName(final String name)
 	{
-		for (final Directory folder : this.directories)
+		for (final Directory directory : this.directories)
 		{
-			if (StringUtils.equals(folder.getName(), name))
+			if (StringUtils.equals(directory.getName(), name))
 			{
-				return folder;
+				return directory;
 			}
 		}
 		return null;
 	}
 
-	protected Directory addDirectory(String name)
+	protected Directory addDirectory(final String name)
 	{
 		final Directory newDirectory = new Directory(this, name);
 
-		directories.add(newDirectory);
+		this.directories.add(newDirectory);
 
 		return newDirectory;
 	}
 
-	protected void addFile(LocatedFileStatus file)
+	protected void addFile(final LocatedFileStatus file)
 	{
-		files.add(file);
+		this.files.add(file);
 	}
 
 	@Override

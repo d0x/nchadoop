@@ -12,17 +12,17 @@ public class SearchRoot extends Directory
 	private long	totalDiskUsage;
 	private long	totalFiles;
 
-	public SearchRoot(String name)
+	public SearchRoot(final String name)
 	{
 		super(null, name);
 	}
 
-	public Directory addPath(final Path path, long size)
+	public Directory addPath(final Path path, final long size)
 	{
 		if (path.isRoot())
 		{
-			totalDiskUsage+=size;
-			totalFiles++;
+			this.totalDiskUsage += size;
+			this.totalFiles++;
 			this.size += size;
 			return this;
 		}

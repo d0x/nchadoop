@@ -7,47 +7,38 @@ import java.util.List;
 import lombok.Data;
 import ncdu.Utils;
 import ncdu.fs.Directory;
+import ncdu.ui.actions.ChangeFolder;
+import ncdu.ui.actions.ShowLocatedFileStatus;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 
 import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.component.ActionListBox;
-import com.googlecode.lanterna.gui.component.Label;
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.LinearLayout;
-import com.googlecode.lanterna.terminal.TerminalPosition;
-import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class FolderActionListBox extends Panel
 {
-	private static final String	BLANK	= "                                                                                                                                                           ";
+	private DirectoryLabel	currentFolderLabel	= new DirectoryLabel();
+	private ActionListBox	listBox				= new ActionListBox() {
 
-	private Directory			currentfolder;
+													@Override
+													protected void printItem(final TextGraphics graphics, final int x, final int y, final int index)
+													{
+														String asText = createItemString(index);
 
-	private Label				label	= new Label();
-	private ActionListBox		listBox	= new ActionListBox() {
-											protected void printItem(TextGraphics graphics, int x, int y, int index)
-											{
-												String asText = createItemString(index);
+														asText = StringUtils.rightPad(asText, graphics.getWidth());
 
-												asText = StringUtils.abbreviate(asText, graphics.getWidth());
-												asText += BLANK;
-												asText = asText.substring(0, graphics.getWidth());
+														graphics.drawString(x, y, asText);
 
-												graphics.drawString(x, y, asText);
-
-											}
-										};
+													}
+												};
 
 	public FolderActionListBox()
 	{
-		this.label.setText(" --- /home/christian/");
-		this.label.setAlignment(Alignment.LEFT_CENTER);
-
-		addComponent(this.label, LinearLayout.MAXIMIZES_HORIZONTALLY);
+		addComponent(this.currentFolderLabel, LinearLayout.MAXIMIZES_HORIZONTALLY);
 		addComponent(this.listBox, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
 	}
 
@@ -63,11 +54,11 @@ public class FolderActionListBox extends Panel
 		public int compareTo(final Displayable o)
 		{
 			// we need to break this down because we need to return an int...
-			if (o.size > size)
+			if (o.size > this.size)
 			{
 				return 1;
 			}
-			else if (o.size < size)
+			else if (o.size < this.size)
 			{
 				return -1;
 			}
@@ -79,9 +70,10 @@ public class FolderActionListBox extends Panel
 
 	}
 
-	public void refresh(final MainWindow ncWindow, Directory directory)
+	public void refresh(final MainWindow ncWindow, final Directory directory)
 	{
-		this.currentfolder = directory;
+		this.currentFolderLabel.refresh(directory);
+
 		this.listBox.clearItems();
 
 		final List<Displayable> items = new ArrayList<>();
@@ -96,7 +88,7 @@ public class FolderActionListBox extends Panel
 
 		for (final LocatedFileStatus file : directory.getFiles())
 		{
-			items.add(new Displayable(file.getPath().getName(), file.getLen(), null));
+			items.add(new Displayable(file.getPath().getName(), file.getLen(), new ShowLocatedFileStatus(ncWindow.getOwner(), file)));
 			if (max < file.getLen())
 				max = file.getLen();
 		}
@@ -108,9 +100,9 @@ public class FolderActionListBox extends Panel
 
 		Collections.sort(items);
 
-		if (this.currentfolder.getParent() != null)
+		if (!directory.isRoot())
 		{
-			this.listBox.addAction("                       /..", new ChangeFolder(this.currentfolder.getParent(), ncWindow));
+			this.listBox.addAction("                       /..", new ChangeFolder(directory.getParent(), ncWindow));
 		}
 
 		for (final Displayable displayable : items)
@@ -118,16 +110,10 @@ public class FolderActionListBox extends Panel
 			this.listBox.addAction(Utils.format(displayable.getName(), displayable.getSize(), displayable.getLargest()), displayable.getAction());
 		}
 
-		if (listBox.getNrOfItems() > 1)
+		if (this.listBox.getNrOfItems() > 1)
 		{
-			listBox.setSelectedItem(1);
+			this.listBox.setSelectedItem(1);
 		}
-	}
-
-	public void setCurrent(final Directory currentFolder)
-	{
-		this.currentfolder = currentFolder;
-
 	}
 
 }
