@@ -24,8 +24,14 @@ public class DirectoryListBox extends AbstractListBox
 		super(null);
 	}
 
-	public void refresh(final MainWindow ncWindow, final Directory directory)
+	public void updateDirectory(final MainWindow ncWindow, final Directory directory)
 	{
+		clearItems();
+		if (directory == null)
+		{
+			return;
+		}
+
 		final List<Displayable> items = new ArrayList<>();
 
 		for (final Directory folder : directory.getDirectories())
@@ -50,7 +56,6 @@ public class DirectoryListBox extends AbstractListBox
 			items.add(0, new Displayable(ncWindow, directory.getParent(), "/..", -1));
 		}
 
-		clearItems();
 		for (final Displayable displayable : items)
 		{
 			addItem(displayable);

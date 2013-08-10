@@ -17,12 +17,21 @@ public class FooterLabel extends Label
 		setAlignment(Alignment.LEFT_CENTER);
 	}
 
-	public void refresh(final MainWindow mainWindow, final SearchRoot searchRoot)
+	public void updateSearchRoot(final MainWindow mainWindow, final SearchRoot searchRoot)
 	{
-		final String readableFileSize = Utils.readableFileSize(searchRoot.getTotalDiskUsage());
-		final long totalFiles = searchRoot.getTotalFiles();
+		String text;
 
-		final String text = MessageFormat.format("Total disk usage {0} in {1} Files", readableFileSize, totalFiles);
+		if (searchRoot == null)
+		{
+			text = "";
+		}
+		else
+		{
+			final String readableFileSize = Utils.readableFileSize(searchRoot.getTotalDiskUsage());
+			final long totalFiles = searchRoot.getTotalFiles();
+
+			text = MessageFormat.format("Total disk usage {0} in {1} Files", readableFileSize, totalFiles);
+		}
 
 		setText(text);
 	}

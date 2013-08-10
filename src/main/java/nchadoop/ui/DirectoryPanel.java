@@ -17,10 +17,10 @@ public class DirectoryPanel extends Panel
 		addComponent(this.listBox, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
 	}
 
-	public void refresh(final MainWindow ncWindow, final Directory directory)
+	public void updateDirectory(final MainWindow ncWindow, final Directory directory)
 	{
-		this.currentFolderLabel.refresh(directory);
-		this.listBox.refresh(ncWindow, directory);
+		this.currentFolderLabel.updateDirectory(directory);
+		this.listBox.updateDirectory(ncWindow, directory);
 	}
 
 }

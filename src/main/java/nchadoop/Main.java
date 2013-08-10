@@ -5,21 +5,31 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import nchadoop.fs.HdfsScanner;
-import nchadoop.fs.SearchRoot;
 import nchadoop.ui.MainWindow;
+import nchadoop.ui.ScanningPopup;
+
+import com.googlecode.lanterna.TerminalFacade;
+import com.googlecode.lanterna.gui.GUIScreen;
 
 public class Main
 {
 //	public static final String	namenode	= "hdfs://carolin:8020/user/";
-	public static final String	namenode	= "file:///home/christian/Desktop";
+	public static final String	namenode	= "file:///home/christian/Desktop/shared";
 
 	public static void main(final String[] args) throws URISyntaxException, IOException, InterruptedException
 	{
 		final URI uri = new URI(Main.namenode);
-		final MainWindow mainWindow = new MainWindow();
-		final HdfsScanner hdfsScanner = new HdfsScanner(uri, "hdfs");
-		final SearchRoot searchRoot = hdfsScanner.refresh(uri);
 
-		mainWindow.refresh(searchRoot);
+		// Create Hdfs
+		final HdfsScanner hdfsScanner = new HdfsScanner(uri, "hdfs");
+
+		// Create windows
+		final GUIScreen gui = TerminalFacade.createGUIScreen();
+		final MainWindow mainWindow = new MainWindow(gui);
+		final ScanningPopup scanningPopup = new ScanningPopup(gui);
+
+		final Controller controller = new Controller(mainWindow, scanningPopup, hdfsScanner);
+
+		controller.start(uri);
 	}
 }

@@ -17,8 +17,10 @@ public class MainWindow extends SingleWindowUi
 	private DirectoryPanel	content	= new DirectoryPanel();
 	private FooterLabel		footer	= new FooterLabel();
 
-	public MainWindow()
+	public MainWindow(final GUIScreen gui)
 	{
+		super(gui);
+
 		this.header.setAlignment(Alignment.LEFT_CENTER);
 
 		this.contentPane.addComponent(this.header, BorderLayout.TOP);
@@ -26,14 +28,24 @@ public class MainWindow extends SingleWindowUi
 		this.contentPane.addComponent(this.footer, BorderLayout.BOTTOM);
 	}
 
-	public void refresh(final SearchRoot searchRoot)
+	public void init()
 	{
-		this.content.refresh(this, searchRoot);
-		this.footer.refresh(this, searchRoot);
+		new Thread(new Runnable() {
+			@Override
+			public void run()
+			{
+				// Those have to be exectued at last
+				addComponent(MainWindow.this.contentPane, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
+				MainWindow.this.gui.showWindow(MainWindow.this, GUIScreen.Position.FULL_SCREEN);
+				MainWindow.this.screen.stopScreen();
+			}
+		}, "ui-mainWindow").start();
+	}
 
-		// Those have to be exectued at last
-		addComponent(this.contentPane, LinearLayout.MAXIMIZES_HORIZONTALLY, LinearLayout.MAXIMIZES_VERTICALLY);
-		this.gui.showWindow(this, GUIScreen.Position.FULL_SCREEN);
+	public void updateSearchRoot(final SearchRoot searchRoot)
+	{
+		this.content.updateDirectory(this, searchRoot);
+		this.footer.updateSearchRoot(this, searchRoot);
 	}
 
 	@Override
@@ -55,6 +67,7 @@ public class MainWindow extends SingleWindowUi
 				MessageBox.showMessageBox(getOwner(), "Error", "Delete is not supported yet.");
 				break;
 
+			case 'Q':
 			case 'q':
 				close();
 				break;
@@ -68,6 +81,6 @@ public class MainWindow extends SingleWindowUi
 
 	public void changeFolder(final Directory directory)
 	{
-		this.content.refresh(this, directory);
+		this.content.updateDirectory(this, directory);
 	}
 }

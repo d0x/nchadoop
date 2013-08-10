@@ -1,16 +1,11 @@
 package nchadoop.ui.components;
 
-import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.gui.Border;
 import com.googlecode.lanterna.gui.GUIScreen;
-import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.Window;
-import com.googlecode.lanterna.gui.Theme.Category;
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.BorderLayout;
 import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.terminal.TerminalPosition;
-import com.googlecode.lanterna.terminal.TerminalSize;
 
 public class SingleWindowUi extends Window
 {
@@ -18,11 +13,11 @@ public class SingleWindowUi extends Window
 	protected Screen	screen;
 	protected Panel		contentPane;
 
-	public SingleWindowUi()
+	public SingleWindowUi(final GUIScreen gui)
 	{
 		super(null);
 
-		this.gui = TerminalFacade.createGUIScreen();
+		this.gui = gui;
 
 		this.screen = this.gui.getScreen();
 		this.screen.startScreen();
@@ -33,13 +28,6 @@ public class SingleWindowUi extends Window
 		this.contentPane = new Panel();
 //		this.contentPane.setBorder(new Border.Invisible());
 		this.contentPane.setLayoutManager(new BorderLayout());
-	}
-	
-	@Override
-	public void close()
-	{
-		super.close();
-		this.screen.stopScreen();
 	}
 
 }
