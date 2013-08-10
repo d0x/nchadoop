@@ -6,6 +6,6 @@ public class HeaderLabel extends Label
 {
 	public HeaderLabel()
 	{
-		super("nchdfs 1.0.0-SNAPSHOT ~ Use the arrow keys to navigate, press ? for help", true);
+		super("nchadoop 1.0.0-SNAPSHOT ~ Use the arrow keys to navigate, press ? for help", true);
 	}
 }

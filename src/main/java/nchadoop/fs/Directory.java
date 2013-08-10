@@ -28,7 +28,10 @@ public class Directory
 	{
 		if (isRoot())
 		{
-			return "/";
+			if (name.endsWith("/"))
+				return name;
+			else
+				return name + "/";
 		}
 
 		return getParent().absolutDirectoryName() + this.name + "/";

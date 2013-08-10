@@ -19,7 +19,8 @@ public class SearchRoot extends Directory
 
 	public Directory addPath(final Path path, final long size)
 	{
-		if (path.isRoot())
+		// TODO: removed this "new Path()"
+		if (path.isRoot() || new Path(getName()).equals(path))
 		{
 			this.totalDiskUsage += size;
 			this.totalFiles++;

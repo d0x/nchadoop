@@ -11,7 +11,7 @@ import nchadoop.ui.MainWindow;
 public class Main
 {
 //	public static final String	namenode	= "hdfs://carolin:8020/user/";
-	public static final String	namenode	= "file:///home/christian/Desktop/shared/";
+	public static final String	namenode	= "file:///home/christian/Desktop";
 
 	public static void main(final String[] args) throws URISyntaxException, IOException, InterruptedException
 	{

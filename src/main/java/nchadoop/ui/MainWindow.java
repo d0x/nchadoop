@@ -13,22 +13,22 @@ import com.googlecode.lanterna.input.Key;
 
 public class MainWindow extends SingleWindowUi
 {
-	private HeaderLabel			header	= new HeaderLabel();
-	private DirectoryPanel	items	= new DirectoryPanel();
-	private FooterLabel			footer	= new FooterLabel();
+	private HeaderLabel		header	= new HeaderLabel();
+	private DirectoryPanel	content	= new DirectoryPanel();
+	private FooterLabel		footer	= new FooterLabel();
 
 	public MainWindow()
 	{
 		this.header.setAlignment(Alignment.LEFT_CENTER);
 
 		this.contentPane.addComponent(this.header, BorderLayout.TOP);
-		this.contentPane.addComponent(this.items, BorderLayout.CENTER);
+		this.contentPane.addComponent(this.content, BorderLayout.CENTER);
 		this.contentPane.addComponent(this.footer, BorderLayout.BOTTOM);
 	}
 
 	public void refresh(final SearchRoot searchRoot)
 	{
-		this.items.refresh(this, searchRoot);
+		this.content.refresh(this, searchRoot);
 		this.footer.refresh(this, searchRoot);
 
 		// Those have to be exectued at last
@@ -68,6 +68,6 @@ public class MainWindow extends SingleWindowUi
 
 	public void changeFolder(final Directory directory)
 	{
-		this.items.refresh(this, directory);
+		this.content.refresh(this, directory);
 	}
 }
