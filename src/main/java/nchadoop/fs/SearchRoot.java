@@ -19,8 +19,11 @@ public class SearchRoot extends Directory
 
 	public Directory addPath(final Path path, final long size)
 	{
-		// TODO: removed this "new Path()"
-		if (path.isRoot() || new Path(getName()).equals(path))
+		// TODO: removed this "new Path()". maybe there is a more elegant way to check this.
+		String rootPath = new Path(name).toUri().getPath();
+		String currentPath = path.toUri().getPath();
+
+		if (path.isRoot() || rootPath.equals(currentPath))
 		{
 			this.totalDiskUsage += size;
 			this.totalFiles++;

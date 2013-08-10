@@ -77,4 +77,19 @@ public class HdfsScannerTest
 		assertThat(directory.getName(), equalTo("simple"));
 	}
 
+	@Test
+	public void shouldStartAtSearchFolderWithoutProtocoll() throws FileNotFoundException, IOException, InterruptedException, URISyntaxException
+	{
+		this.namenode = new URI(this.testFolder.getTempDirectory().toString());
+		this.cut = new HdfsScanner(this.namenode, "hdfs");
+		this.refresh = this.cut.refresh(this.namenode);
+
+		final List<Directory> directories = refresh.getDirectories();
+		assertThat(directories.size(), is(1));
+
+		final Directory directory = directories.get(0);
+
+		assertThat(directory.getName(), equalTo("simple"));
+	}
+
 }

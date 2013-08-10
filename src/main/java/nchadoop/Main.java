@@ -13,12 +13,9 @@ import com.googlecode.lanterna.gui.GUIScreen;
 
 public class Main
 {
-//	public static final String	namenode	= "hdfs://carolin:8020/user/";
-	public static final String	namenode	= "file:///home/christian/Desktop/shared";
-
-	public static void main(final String[] args) throws URISyntaxException, IOException, InterruptedException
+	public static void main(final String... args) throws URISyntaxException, IOException, InterruptedException
 	{
-		final URI uri = new URI(Main.namenode);
+		final URI uri = new URI(args[0]);
 
 		// Create Hdfs
 		final HdfsScanner hdfsScanner = new HdfsScanner(uri, "hdfs");

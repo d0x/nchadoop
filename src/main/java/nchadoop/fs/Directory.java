@@ -11,13 +11,13 @@ import org.apache.hadoop.fs.LocatedFileStatus;
 @Data
 public class Directory
 {
-	private final Directory			parent;
-	private final String			name;
+	protected final Directory			parent;
+	protected final String				name;
 
-	private List<Directory>			directories	= new ArrayList<>();
-	private List<LocatedFileStatus>	files		= new ArrayList<>();
+	protected List<Directory>			directories	= new ArrayList<>();
+	protected List<LocatedFileStatus>	files		= new ArrayList<>();
 
-	protected long					size		= 0;
+	protected long						size		= 0;
 
 	public boolean isRoot()
 	{
