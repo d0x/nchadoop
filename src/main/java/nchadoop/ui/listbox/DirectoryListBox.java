@@ -56,7 +56,11 @@ public class DirectoryListBox extends AbstractListBox
 			addItem(displayable);
 		}
 
-		if (getNrOfItems() > 1)
+		if (directory.isRoot())
+		{
+			setSelectedItem(0);
+		}
+		else
 		{
 			setSelectedItem(1);
 		}
