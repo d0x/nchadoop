@@ -51,7 +51,7 @@ public class Displayable implements Comparable<Displayable>
 		if (size == 0)
 			return "0.0";
 
-		final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+		final String[] units = new String[]{"B", "KB", "MB", "GB", "TB", "PB", "EB"};
 		final int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
 		final DecimalFormat decimalFormat = new DecimalFormat("#,##0.0");
 
