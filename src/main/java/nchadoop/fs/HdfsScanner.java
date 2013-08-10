@@ -37,8 +37,13 @@ public class HdfsScanner
 
 		return searchRoot;
 	}
+	
+	public boolean deletePath(String path) throws IOException
+	{
+		return fileSystem.delete(new Path(path), true);
+	}
 
-	public void addFile(SearchRoot searchRoot, final LocatedFileStatus file)
+	private void addFile(SearchRoot searchRoot, final LocatedFileStatus file)
 	{
 		final Path directorPath = file.getPath().getParent();
 

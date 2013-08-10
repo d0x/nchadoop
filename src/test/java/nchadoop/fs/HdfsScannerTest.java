@@ -3,7 +3,9 @@ package nchadoop.fs;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
@@ -12,6 +14,7 @@ import java.util.List;
 
 import nchadoop.fs.util.TestEnviorment;
 
+import org.apache.hadoop.fs.Path;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,6 +93,19 @@ public class HdfsScannerTest
 		final Directory directory = directories.get(0);
 
 		assertThat(directory.getName(), equalTo("simple"));
+	}
+	
+	@Test
+	public void shouldDeleteDirectories() throws IOException
+	{
+		Directory directory = refresh.directories.get(0);
+		String dirToDeleteString = directory.absolutDirectoryName();
+		String pathWithoutProtocol = new Path(dirToDeleteString).toUri().getPath(); 
+		
+		
+		assertThat(new File(pathWithoutProtocol).exists(), is(true));
+		assertTrue(cut.deletePath(dirToDeleteString));
+		assertThat(new File(pathWithoutProtocol).exists(), is(false));
 	}
 
 }
