@@ -36,12 +36,12 @@ public class DirectoryListBox extends AbstractListBox
 
 		for (final Directory folder : directory.getDirectories())
 		{
-			items.add(new Displayable(ncWindow, folder, "/" + folder.getName(), folder.getSize()));
+			items.add(new Displayable(ncWindow, folder, "/" + folder.getName(), folder.getSize(), folder));
 		}
 
 		for (final LocatedFileStatus file : directory.getFiles())
 		{
-			items.add(new Displayable(ncWindow, null, file.getPath().getName(), file.getLen()));
+			items.add(new Displayable(ncWindow, null, file.getPath().getName(), file.getLen(), file));
 		}
 
 		Collections.sort(items);
@@ -53,7 +53,7 @@ public class DirectoryListBox extends AbstractListBox
 
 		if (!directory.isRoot())
 		{
-			items.add(0, new Displayable(ncWindow, directory.getParent(), "/..", -1));
+			items.add(0, new Displayable(ncWindow, directory.getParent(), "/..", -1, null));
 		}
 
 		for (final Displayable displayable : items)

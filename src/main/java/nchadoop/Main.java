@@ -17,15 +17,25 @@ public class Main
 	{
 		final URI uri = new URI(args[0]);
 
-		// Create Hdfs
+		// Create components
 		final HdfsScanner hdfsScanner = new HdfsScanner(uri, "hdfs");
 
-		// Create windows
-		final GUIScreen gui = TerminalFacade.createGUIScreen();
-		final MainWindow mainWindow = new MainWindow(gui);
-		final ScanningPopup scanningPopup = new ScanningPopup(gui);
+		final GUIScreen guiScreen = TerminalFacade.createGUIScreen();
+		final MainWindow mainWindow = new MainWindow(guiScreen);
+		final ScanningPopup scanningPopup = new ScanningPopup();
 
-		final Controller controller = new Controller(mainWindow, scanningPopup, hdfsScanner);
+		final Controller controller = new Controller();
+
+		// wirre them
+		mainWindow.setController(controller);
+
+		scanningPopup.setGui(guiScreen);
+		scanningPopup.setController(controller);
+
+		controller.setGuiScreen(guiScreen);
+		controller.setMainWindow(mainWindow);
+		controller.setScanningPopup(scanningPopup);
+		controller.setHdfsScanner(hdfsScanner);
 
 		controller.start(uri);
 	}

@@ -7,6 +7,7 @@ import lombok.Data;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.Path;
 
 @Data
 public class Directory
@@ -67,5 +68,30 @@ public class Directory
 	public String toString()
 	{
 		return this.name;
+	}
+
+	public Path toPath()
+	{
+		return new Path(absolutDirectoryName());
+	}
+
+	public void remove()
+	{
+		if (isRoot() == false)
+		{
+			parent.directories.remove(this);
+		}
+		
+		adjustSizeRecursive(size * -1);
+	}
+
+	protected void adjustSizeRecursive(long correction)
+	{
+		size += correction;
+
+		if (isRoot() == false)
+		{
+			parent.adjustSizeRecursive(correction);
+		}
 	}
 }

@@ -17,6 +17,8 @@ public class Displayable implements Comparable<Displayable>
 	private final String		name;
 	private final long			size;
 
+	private final Object		reference;
+
 	@Override
 	public int compareTo(final Displayable o)
 	{

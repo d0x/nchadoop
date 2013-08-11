@@ -94,18 +94,31 @@ public class HdfsScannerTest
 
 		assertThat(directory.getName(), equalTo("simple"));
 	}
-	
+
 	@Test
 	public void shouldDeleteDirectories() throws IOException
 	{
 		Directory directory = refresh.directories.get(0);
 		String dirToDeleteString = directory.absolutDirectoryName();
-		String pathWithoutProtocol = new Path(dirToDeleteString).toUri().getPath(); 
-		
-		
+		String pathWithoutProtocol = new Path(dirToDeleteString).toUri().getPath();
+
 		assertThat(new File(pathWithoutProtocol).exists(), is(true));
-		assertTrue(cut.deletePath(dirToDeleteString));
+		assertTrue(cut.deleteDirectory(directory));
 		assertThat(new File(pathWithoutProtocol).exists(), is(false));
+	}
+
+	@Test
+	public void shouldDeleteDirectoriesAndAdjustFileSizes() throws IOException
+	{
+		Directory directory = refresh.findDirectoryByName("simple").findDirectoryByName("26byte").findDirectoryByName("10byte");
+
+		long oldTotalDiskUsage = refresh.getTotalDiskUsage();
+		long directorySize = directory.size;
+
+		cut.deleteDirectory(directory);
+
+		assertThat(refresh.getTotalDiskUsage(), is(oldTotalDiskUsage - directorySize));
+
 	}
 
 }

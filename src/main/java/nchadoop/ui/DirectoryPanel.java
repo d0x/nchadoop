@@ -1,11 +1,13 @@
 package nchadoop.ui;
 
+import lombok.Data;
 import nchadoop.fs.Directory;
 import nchadoop.ui.listbox.DirectoryListBox;
 
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.LinearLayout;
 
+@Data
 public class DirectoryPanel extends Panel
 {
 	private DirectoryLabel		currentFolderLabel	= new DirectoryLabel();

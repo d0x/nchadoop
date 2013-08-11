@@ -1,32 +1,43 @@
 package nchadoop.ui;
 
+import lombok.Data;
+import nchadoop.Controller;
+
 import com.googlecode.lanterna.gui.GUIScreen;
 import com.googlecode.lanterna.gui.GUIScreen.Position;
-import com.googlecode.lanterna.gui.Window;
-import com.googlecode.lanterna.gui.component.Label;
+import com.googlecode.lanterna.gui.dialog.WaitingDialog;
+import com.googlecode.lanterna.input.Key;
 
-public class ScanningPopup extends Window
+@Data
+public class ScanningPopup extends WaitingDialog
 {
 	private GUIScreen	gui;
+	private Controller	controller;
 
-	public ScanningPopup(final GUIScreen gui)
+	public ScanningPopup()
 	{
-		super("Scanning...");
-
-		this.gui = gui;
-
-		addComponent(new Label("Please wait until the directories are scanned."));
+		super("Scanning...", "Please wait until the directories are scanned.");
 	}
 
 	public void show()
 	{
 		new Thread(new Runnable() {
+
 			@Override
 			public void run()
 			{
 				ScanningPopup.this.gui.showWindow(ScanningPopup.this, Position.CENTER);
 			}
-		}, "ui-scanPopup").start();
+		}).start();
+	}
+
+	@Override
+	public void onKeyPressed(Key key)
+	{
+		if (controller.handleGlobalKeyPressed(this, key) == false)
+		{
+			super.onKeyPressed(key);
+		}
 	}
 
 	@Override

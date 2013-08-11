@@ -47,4 +47,12 @@ public class SearchRoot extends Directory
 		return directory;
 	}
 
+	@Override
+	protected void adjustSizeRecursive(long correction)
+	{
+		super.adjustSizeRecursive(correction);
+
+		totalDiskUsage += correction;
+	}
+
 }
