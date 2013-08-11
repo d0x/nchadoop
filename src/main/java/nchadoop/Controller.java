@@ -10,6 +10,8 @@ import nchadoop.fs.SearchRoot;
 import nchadoop.ui.MainWindow;
 import nchadoop.ui.ScanningPopup;
 
+import org.apache.hadoop.fs.LocatedFileStatus;
+
 import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.GUIScreen;
 import com.googlecode.lanterna.gui.Window;
@@ -34,7 +36,7 @@ public class Controller
 		try
 		{
 			final SearchRoot searchRoot = Controller.this.hdfsScanner.refresh(uri);
-			
+
 			Controller.this.mainWindow.getOwner().runInEventThread(new Action() {
 
 				@Override
@@ -90,6 +92,25 @@ public class Controller
 			else
 			{
 				mainWindow.changeFolder(directory.getParent());
+			}
+		}
+		catch (IOException e)
+		{
+			MessageBox.showMessageBox(guiScreen, "Error", "Error: " + e.getMessage());
+		}
+	}
+
+	public void deleteFile(Directory parent, LocatedFileStatus file)
+	{
+		try
+		{
+			if (hdfsScanner.deleteFile(parent, file) == false)
+			{
+				throw new IOException("Couldn't delete this file");
+			}
+			else
+			{
+				mainWindow.changeFolder(parent);
 			}
 		}
 		catch (IOException e)

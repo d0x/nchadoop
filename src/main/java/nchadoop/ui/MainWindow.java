@@ -6,6 +6,8 @@ import nchadoop.fs.Directory;
 import nchadoop.fs.SearchRoot;
 import nchadoop.ui.listbox.Displayable;
 
+import org.apache.hadoop.fs.LocatedFileStatus;
+
 import com.googlecode.lanterna.gui.Border;
 import com.googlecode.lanterna.gui.Component.Alignment;
 import com.googlecode.lanterna.gui.GUIScreen;
@@ -103,6 +105,10 @@ public class MainWindow extends Window
 		if (reference instanceof Directory)
 		{
 			controller.deleteDiretory((Directory) reference);
+		}
+		else if(reference instanceof LocatedFileStatus)
+		{
+			controller.deleteFile(directoryPanel.getCurrentDirectory(), (LocatedFileStatus) reference);
 		}
 		else
 		{

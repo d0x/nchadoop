@@ -84,6 +84,12 @@ public class Directory
 		
 		adjustSizeRecursive(size * -1);
 	}
+	public void remove(LocatedFileStatus file)
+	{
+		files.remove(file);
+		
+		adjustSizeRecursive(file.getLen() * -1);
+	}
 
 	protected void adjustSizeRecursive(long correction)
 	{

@@ -67,7 +67,10 @@ public class DirectoryListBox extends AbstractListBox
 		}
 		else
 		{
-			setSelectedItem(1);
+			if (getNrOfItems() > 1)
+			{
+				setSelectedItem(1);
+			}
 		}
 
 	}
@@ -99,7 +102,7 @@ public class DirectoryListBox extends AbstractListBox
 	@Override
 	protected Theme.Definition getListItemThemeDefinition(final Theme theme)
 	{
-		return theme.getDefinition(Theme.Category.DIALOG_AREA);
+		return theme.getDefinition(Theme.Category.SCREEN_BACKGROUND);
 	}
 
 	@Override

@@ -65,6 +65,19 @@ public class HdfsScanner
 
 		return deleteSuccess;
 	}
+	
+	public boolean deleteFile(Directory parent, LocatedFileStatus fileStatus) throws IOException
+	{
+		boolean delete = fileSystem.delete(fileStatus.getPath(), false);
+		
+		if(delete)
+		{
+			parent.remove(fileStatus);
+		}
+		
+		return delete;
+		
+	}
 
 	private void addFile(SearchRoot searchRoot, final LocatedFileStatus file)
 	{

@@ -1,5 +1,7 @@
 package nchadoop.ui.listbox;
 
+import static org.hamcrest.Matchers.nullValue;
+
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 
@@ -82,7 +84,10 @@ public class Displayable implements Comparable<Displayable>
 
 	public void navigate()
 	{
-		this.mainWindow.changeFolder(this.target);
+		if(target != null)
+		{
+			this.mainWindow.changeFolder(this.target);
+		}
 	}
 
 }

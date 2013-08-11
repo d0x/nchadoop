@@ -1,4 +1,4 @@
-# nchadoop is a *ncdu* like file browser to identify wasted disc space
+# nchadoop is a *ncdu* like file browser for Hadoop to identify wasted disc space
 
 It can scans folders on hdfs and procudes are cli like this:
 

@@ -26,7 +26,7 @@ public class Main
 
 		final Controller controller = new Controller();
 
-		// wirre them
+		// wire them
 		mainWindow.setController(controller);
 
 		scanningPopup.setGui(guiScreen);
