@@ -72,7 +72,6 @@ public class DirectoryListBox extends AbstractListBox
 				setSelectedItem(1);
 			}
 		}
-
 	}
 
 	@Override

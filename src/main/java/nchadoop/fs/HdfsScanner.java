@@ -1,5 +1,7 @@
 package nchadoop.fs;
 
+import static org.hamcrest.Matchers.nullValue;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.NoSuchElementException;
@@ -25,22 +27,37 @@ public class HdfsScanner
 		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
 	}
 
-	public SearchRoot refresh(URI searchUri) throws IOException
+	public SearchRoot refresh(URI namenode) throws IOException
 	{
+		return refresh(namenode, null);
+	}
+
+	public SearchRoot refresh(URI searchUri, StatusCallback callback) throws IOException
+	{
+		if (callback != null)
+		{
+			callback.onScanStarted(searchUri);
+		}
+
 		interrupted = false;
+
 		final RemoteIterator<LocatedFileStatus> fileList = this.fileSystem.listFiles(new Path(searchUri), true);
 
 		SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		NoSuchElementException stop = null;
-
 		// This way is required because .hasNext() throws an IOException if its not possible
 		// to access the file...
+		NoSuchElementException stop = null;
 		while (stop == null && !interrupted)
 		{
 			try
 			{
-				addFile(searchRoot, fileList.next());
+				LocatedFileStatus next = fileList.next();
+				if (callback != null)
+				{
+					callback.onVisitFile(next);
+				}
+				addFile(searchRoot, next);
 			}
 			catch (IOException e)
 			{
@@ -51,12 +68,17 @@ public class HdfsScanner
 				stop = e;
 			}
 		}
+
+		if (callback != null)
+		{
+			callback.onScanFinished(searchRoot);
+		}
 		return searchRoot;
 	}
 
 	public boolean deleteDirectory(Directory directory) throws IOException
 	{
-		boolean deleteSuccess = fileSystem.delete(directory.toPath(), true);
+		boolean deleteSuccess = fileSystem.delete(new Path(directory.absolutDirectoryName()), true);
 
 		if (deleteSuccess)
 		{
@@ -65,18 +87,18 @@ public class HdfsScanner
 
 		return deleteSuccess;
 	}
-	
+
 	public boolean deleteFile(Directory parent, LocatedFileStatus fileStatus) throws IOException
 	{
 		boolean delete = fileSystem.delete(fileStatus.getPath(), false);
-		
-		if(delete)
+
+		if (delete)
 		{
-			parent.remove(fileStatus);
+			parent.removeFile(fileStatus);
 		}
-		
+
 		return delete;
-		
+
 	}
 
 	private void addFile(SearchRoot searchRoot, final LocatedFileStatus file)
@@ -91,6 +113,15 @@ public class HdfsScanner
 	public void close()
 	{
 		interrupted = true;
+	}
+
+	public static interface StatusCallback
+	{
+		void onVisitFile(LocatedFileStatus next);
+
+		void onScanFinished(SearchRoot searchRoot);
+
+		void onScanStarted(URI searchUri);
 	}
 
 }

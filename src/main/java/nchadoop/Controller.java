@@ -27,25 +27,15 @@ public class Controller
 	private ScanningPopup	scanningPopup;
 	private HdfsScanner		hdfsScanner;
 
-	public void start(final URI uri)
+	public void startScan(final URI uri)
 	{
-		// TODO: need to ensure that the init thread runs first!
 		this.mainWindow.init();
-		this.scanningPopup.show();
 
 		try
 		{
-			final SearchRoot searchRoot = Controller.this.hdfsScanner.refresh(uri);
+			final SearchRoot searchRoot = hdfsScanner.refresh(uri, scanningPopup);
 
-			Controller.this.mainWindow.getOwner().runInEventThread(new Action() {
-
-				@Override
-				public void doAction()
-				{
-					scanningPopup.close();
-					Controller.this.mainWindow.updateSearchRoot(searchRoot);
-				}
-			});
+			this.mainWindow.updateSearchRoot(searchRoot);
 		}
 		catch (final Exception e)
 		{
@@ -72,7 +62,6 @@ public class Controller
 		}
 
 		return false;
-
 	}
 
 	public void deleteDiretory(Directory directory)

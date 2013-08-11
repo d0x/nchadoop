@@ -8,6 +8,7 @@ import nchadoop.ui.listbox.Displayable;
 
 import org.apache.hadoop.fs.LocatedFileStatus;
 
+import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.Border;
 import com.googlecode.lanterna.gui.Component.Alignment;
 import com.googlecode.lanterna.gui.GUIScreen;
@@ -22,14 +23,14 @@ import com.googlecode.lanterna.screen.Screen;
 @Data
 public class MainWindow extends Window
 {
-	protected GUIScreen		gui;
-	protected Screen		screen;
+	protected final GUIScreen		gui;
+	protected final Screen			screen;
 
-	private HeaderLabel		header			= new HeaderLabel();
-	private DirectoryPanel	directoryPanel	= new DirectoryPanel();
-	private FooterLabel		footer			= new FooterLabel();
+	private final HeaderLabel		header			= new HeaderLabel();
+	private final DirectoryPanel	directoryPanel	= new DirectoryPanel();
+	private final FooterLabel		footer			= new FooterLabel();
 
-	private Controller		controller;
+	private Controller				controller;
 
 	public MainWindow(GUIScreen guiScreen)
 	{
@@ -46,7 +47,7 @@ public class MainWindow extends Window
 	private void layout()
 	{
 		this.header.setAlignment(Alignment.LEFT_CENTER);
-		
+
 		setBorder(new Border.Invisible());
 
 		Panel contentPane = new Panel();
@@ -61,7 +62,6 @@ public class MainWindow extends Window
 	public void init()
 	{
 		new Thread(new Runnable() {
-
 			@Override
 			public void run()
 			{
@@ -72,8 +72,14 @@ public class MainWindow extends Window
 
 	public void updateSearchRoot(final SearchRoot searchRoot)
 	{
-		this.directoryPanel.updateDirectory(this, searchRoot);
-		this.footer.updateSearchRoot(this, searchRoot);
+		getOwner().runInEventThread(new Action() {
+			@Override
+			public void doAction()
+			{
+				directoryPanel.updateDirectory(MainWindow.this, searchRoot);
+				footer.updateSearchRoot(MainWindow.this, searchRoot);
+			}
+		});
 	}
 
 	@Override
@@ -106,7 +112,7 @@ public class MainWindow extends Window
 		{
 			controller.deleteDiretory((Directory) reference);
 		}
-		else if(reference instanceof LocatedFileStatus)
+		else if (reference instanceof LocatedFileStatus)
 		{
 			controller.deleteFile(directoryPanel.getCurrentDirectory(), (LocatedFileStatus) reference);
 		}

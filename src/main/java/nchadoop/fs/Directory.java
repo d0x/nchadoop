@@ -27,47 +27,27 @@ public class Directory
 
 	public String absolutDirectoryName()
 	{
-		if (isRoot())
-		{
-			if (name.endsWith("/"))
-				return name;
-			else
-				return name + "/";
-		}
+		StringBuilder builder = new StringBuilder();
 
-		return getParent().absolutDirectoryName() + this.name + "/";
+		Directory directory = this;
+		do
+		{
+			builder.insert(0, directory.name + "/");
+		} while ((directory = directory.getParent()) != null);
+
+		return builder.toString();
 	}
 
 	public Directory findDirectoryByName(final String name)
 	{
 		for (final Directory directory : this.directories)
 		{
-			if (StringUtils.equals(directory.getName(), name))
+			if (StringUtils.equals(directory.name, name))
 			{
 				return directory;
 			}
 		}
 		return null;
-	}
-
-	protected Directory addDirectory(final String name)
-	{
-		final Directory newDirectory = new Directory(this, name);
-
-		this.directories.add(newDirectory);
-
-		return newDirectory;
-	}
-
-	protected void addFile(final LocatedFileStatus file)
-	{
-		this.files.add(file);
-	}
-
-	@Override
-	public String toString()
-	{
-		return this.name;
 	}
 
 	public Path toPath()
@@ -81,14 +61,29 @@ public class Directory
 		{
 			parent.directories.remove(this);
 		}
-		
+
 		adjustSizeRecursive(size * -1);
 	}
-	public void remove(LocatedFileStatus file)
+
+	public void removeFile(LocatedFileStatus file)
 	{
 		files.remove(file);
-		
+
 		adjustSizeRecursive(file.getLen() * -1);
+	}
+
+	protected Directory addDirectory(final String name)
+	{
+		final Directory directory = new Directory(this, name);
+
+		this.directories.add(directory);
+
+		return directory;
+	}
+
+	protected void addFile(final LocatedFileStatus file)
+	{
+		this.files.add(file);
 	}
 
 	protected void adjustSizeRecursive(long correction)

@@ -37,6 +37,6 @@ public class Main
 		controller.setScanningPopup(scanningPopup);
 		controller.setHdfsScanner(hdfsScanner);
 
-		controller.start(uri);
+		controller.startScan(uri);
 	}
 }
