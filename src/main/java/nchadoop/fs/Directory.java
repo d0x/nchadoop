@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
 
 @Data
@@ -16,7 +16,7 @@ public class Directory
 	protected final String				name;
 
 	protected List<Directory>			directories	= new ArrayList<>();
-	protected List<LocatedFileStatus>	files		= new ArrayList<>();
+	protected List<FileStatus>	files		= new ArrayList<>();
 
 	protected long						size		= 0;
 
@@ -65,7 +65,7 @@ public class Directory
 		adjustSizeRecursive(size * -1);
 	}
 
-	public void removeFile(LocatedFileStatus file)
+	public void removeFile(FileStatus file)
 	{
 		files.remove(file);
 
@@ -81,7 +81,7 @@ public class Directory
 		return directory;
 	}
 
-	protected void addFile(final LocatedFileStatus file)
+	protected void addFile(final FileStatus file)
 	{
 		this.files.add(file);
 	}

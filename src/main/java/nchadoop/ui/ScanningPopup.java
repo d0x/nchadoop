@@ -8,7 +8,7 @@ import nchadoop.fs.HdfsScanner.StatusCallback;
 import nchadoop.fs.SearchRoot;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.FileStatus;
 
 import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.GUIScreen;
@@ -97,7 +97,7 @@ public class ScanningPopup extends Window implements StatusCallback
 	}
 
 	@Override
-	public void onVisitFile(LocatedFileStatus next)
+	public void onVisitFile(FileStatus next)
 	{
 		this.lastVisitedFile = next.getPath().toString();
 		totalSize += next.getLen();

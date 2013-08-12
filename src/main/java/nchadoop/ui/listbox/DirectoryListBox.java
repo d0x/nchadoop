@@ -7,7 +7,7 @@ import java.util.List;
 import nchadoop.fs.Directory;
 import nchadoop.ui.MainWindow;
 
-import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.FileStatus;
 
 import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.Theme;
@@ -39,7 +39,7 @@ public class DirectoryListBox extends AbstractListBox
 			items.add(new Displayable(ncWindow, folder, "/" + folder.getName(), folder.getSize(), folder));
 		}
 
-		for (final LocatedFileStatus file : directory.getFiles())
+		for (final FileStatus file : directory.getFiles())
 		{
 			items.add(new Displayable(ncWindow, null, file.getPath().getName(), file.getLen(), file));
 		}

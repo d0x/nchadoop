@@ -12,7 +12,6 @@ import nchadoop.ui.ScanningPopup;
 
 import org.apache.hadoop.fs.LocatedFileStatus;
 
-import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.GUIScreen;
 import com.googlecode.lanterna.gui.Window;
 import com.googlecode.lanterna.gui.dialog.MessageBox;

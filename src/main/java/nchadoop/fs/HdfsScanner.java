@@ -1,19 +1,17 @@
 package nchadoop.fs;
 
-import static org.hamcrest.Matchers.nullValue;
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.util.NoSuchElementException;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.RemoteIterator;
 
 @Slf4j
 @Data
@@ -41,39 +39,42 @@ public class HdfsScanner
 
 		interrupted = false;
 
-		final RemoteIterator<LocatedFileStatus> fileList = this.fileSystem.listFiles(new Path(searchUri), true);
-
 		SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		// This way is required because .hasNext() throws an IOException if its not possible
-		// to access the file...
-		NoSuchElementException stop = null;
-		while (stop == null && !interrupted)
-		{
-			try
-			{
-				LocatedFileStatus next = fileList.next();
-				if (callback != null)
-				{
-					callback.onVisitFile(next);
-				}
-				addFile(searchRoot, next);
-			}
-			catch (IOException e)
-			{
-				log.warn("IOException on file: {}", e.getMessage());
-			}
-			catch (NoSuchElementException e)
-			{
-				stop = e;
-			}
-		}
-
+		walkThroughDirectories(callback, searchRoot, fileSystem.listStatus(new Path(searchUri)));
+		
 		if (callback != null)
 		{
 			callback.onScanFinished(searchRoot);
 		}
 		return searchRoot;
+	}
+
+	private void walkThroughDirectories(StatusCallback callback, SearchRoot searchRoot, FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException
+	{
+		for (FileStatus fileStatus : listLocatedStatus)
+		{
+			if (fileStatus.isDirectory())
+			{
+				try
+				{
+					walkThroughDirectories(callback, searchRoot, fileSystem.listStatus(fileStatus.getPath()));
+				}
+				catch (IOException e)
+				{
+					log.warn("Couldn't open directory {}. Exception: {}", fileStatus.getPath(), e.getMessage());
+				}
+			}
+			else
+			{
+				if (callback != null)
+				{
+					callback.onVisitFile(fileStatus);
+				}
+				addFile(searchRoot, fileStatus);
+			}
+		}
+
 	}
 
 	public boolean deleteDirectory(Directory directory) throws IOException
@@ -101,7 +102,7 @@ public class HdfsScanner
 
 	}
 
-	private void addFile(SearchRoot searchRoot, final LocatedFileStatus file)
+	private void addFile(SearchRoot searchRoot, final FileStatus file)
 	{
 		final Path directorPath = file.getPath().getParent();
 
@@ -117,7 +118,7 @@ public class HdfsScanner
 
 	public static interface StatusCallback
 	{
-		void onVisitFile(LocatedFileStatus next);
+		void onVisitFile(FileStatus next);
 
 		void onScanFinished(SearchRoot searchRoot);
 
