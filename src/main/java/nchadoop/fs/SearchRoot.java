@@ -20,8 +20,8 @@ public class SearchRoot extends Directory
 	public Directory addPath(final Path path, final long size)
 	{
 		// TODO: removed this "new Path()". maybe there is a more elegant way to check this.
-		String rootPath = new Path(name).toUri().getPath();
-		String currentPath = path.toUri().getPath();
+		final String rootPath = new Path(this.name).toUri().getPath();
+		final String currentPath = path.toUri().getPath();
 
 		if (path.isRoot() || rootPath.equals(currentPath))
 		{
@@ -48,11 +48,11 @@ public class SearchRoot extends Directory
 	}
 
 	@Override
-	protected void adjustSizeRecursive(long correction)
+	protected void adjustSizeRecursive(final long correction)
 	{
 		super.adjustSizeRecursive(correction);
 
-		totalDiskUsage += correction;
+		this.totalDiskUsage += correction;
 	}
 
 }

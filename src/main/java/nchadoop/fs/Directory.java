@@ -3,22 +3,30 @@ package nchadoop.fs;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
 
-@Data
+@Getter
+@Setter
 public class Directory
 {
-	protected final Directory			parent;
-	protected final String				name;
+	protected final Directory	parent;
+	protected final String		name;
 
-	protected List<Directory>			directories	= new ArrayList<>();
+	protected List<Directory>	directories	= new ArrayList<>();
 	protected List<FileStatus>	files		= new ArrayList<>();
 
-	protected long						size		= 0;
+	protected long				size		= 0;
+
+	public Directory(final Directory parent, final String name)
+	{
+		this.parent = parent;
+		this.name = StringUtils.removeEnd(name, "/");
+	}
 
 	public boolean isRoot()
 	{
@@ -27,7 +35,7 @@ public class Directory
 
 	public String absolutDirectoryName()
 	{
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 
 		Directory directory = this;
 		do
@@ -59,15 +67,15 @@ public class Directory
 	{
 		if (isRoot() == false)
 		{
-			parent.directories.remove(this);
+			this.parent.directories.remove(this);
 		}
 
-		adjustSizeRecursive(size * -1);
+		adjustSizeRecursive(this.size * -1);
 	}
 
-	public void removeFile(FileStatus file)
+	public void removeFile(final FileStatus file)
 	{
-		files.remove(file);
+		this.files.remove(file);
 
 		adjustSizeRecursive(file.getLen() * -1);
 	}
@@ -86,13 +94,13 @@ public class Directory
 		this.files.add(file);
 	}
 
-	protected void adjustSizeRecursive(long correction)
+	protected void adjustSizeRecursive(final long correction)
 	{
-		size += correction;
+		this.size += correction;
 
 		if (isRoot() == false)
 		{
-			parent.adjustSizeRecursive(correction);
+			this.parent.adjustSizeRecursive(correction);
 		}
 	}
 }

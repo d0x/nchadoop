@@ -10,7 +10,7 @@ import nchadoop.fs.SearchRoot;
 import nchadoop.ui.MainWindow;
 import nchadoop.ui.ScanningPopup;
 
-import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.FileStatus;
 
 import com.googlecode.lanterna.gui.GUIScreen;
 import com.googlecode.lanterna.gui.Window;
@@ -32,27 +32,27 @@ public class Controller
 
 		try
 		{
-			final SearchRoot searchRoot = hdfsScanner.refresh(uri, scanningPopup);
+			final SearchRoot searchRoot = this.hdfsScanner.refresh(uri, this.scanningPopup);
 
 			this.mainWindow.updateSearchRoot(searchRoot);
 		}
 		catch (final Exception e)
 		{
-			scanningPopup.close();
-			MessageBox.showMessageBox(guiScreen, "Error", "Error: " + e);
+			this.scanningPopup.close();
+			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e);
 			shutdown();
 		}
 	}
 
 	public void shutdown()
 	{
-		scanningPopup.close();
-		mainWindow.close();
-		guiScreen.getScreen().stopScreen();
-		hdfsScanner.close();
+		this.scanningPopup.close();
+		this.mainWindow.close();
+		this.guiScreen.getScreen().stopScreen();
+		this.hdfsScanner.close();
 	}
 
-	public boolean handleGlobalKeyPressed(Window sender, Key key)
+	public boolean handleGlobalKeyPressed(final Window sender, final Key key)
 	{
 		if (key.getCharacter() == 'q' || key.getKind() == Kind.Escape)
 		{
@@ -63,47 +63,47 @@ public class Controller
 		return false;
 	}
 
-	public void deleteDiretory(Directory directory)
+	public void deleteDiretory(final Directory directory)
 	{
 		if (directory.isRoot())
 		{
-			MessageBox.showMessageBox(guiScreen, "Error", "Couldn't the search root.");
+			MessageBox.showMessageBox(this.guiScreen, "Error", "Couldn't the search root.");
 			return;
 		}
 
 		try
 		{
-			if (!hdfsScanner.deleteDirectory(directory))
+			if (!this.hdfsScanner.deleteDirectory(directory))
 			{
-				MessageBox.showMessageBox(guiScreen, "Error", "Couldn't delete this.");
+				MessageBox.showMessageBox(this.guiScreen, "Error", "Couldn't delete this.");
 			}
 			else
 			{
-				mainWindow.changeFolder(directory.getParent());
+				this.mainWindow.changeFolder(directory.getParent());
 			}
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			MessageBox.showMessageBox(guiScreen, "Error", "Error: " + e.getMessage());
+			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
 		}
 	}
 
-	public void deleteFile(Directory parent, LocatedFileStatus file)
+	public void deleteFile(final Directory parent, final FileStatus file)
 	{
 		try
 		{
-			if (hdfsScanner.deleteFile(parent, file) == false)
+			if (this.hdfsScanner.deleteFile(parent, file) == false)
 			{
 				throw new IOException("Couldn't delete this file");
 			}
 			else
 			{
-				mainWindow.changeFolder(parent);
+				this.mainWindow.changeFolder(parent);
 			}
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			MessageBox.showMessageBox(guiScreen, "Error", "Error: " + e.getMessage());
+			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
 		}
 	}
 }

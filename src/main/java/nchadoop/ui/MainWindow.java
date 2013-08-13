@@ -6,7 +6,7 @@ import nchadoop.fs.Directory;
 import nchadoop.fs.SearchRoot;
 import nchadoop.ui.listbox.Displayable;
 
-import org.apache.hadoop.fs.LocatedFileStatus;
+import org.apache.hadoop.fs.FileStatus;
 
 import com.googlecode.lanterna.gui.Action;
 import com.googlecode.lanterna.gui.Border;
@@ -32,7 +32,7 @@ public class MainWindow extends Window
 
 	private Controller				controller;
 
-	public MainWindow(GUIScreen guiScreen)
+	public MainWindow(final GUIScreen guiScreen)
 	{
 		super("");
 
@@ -50,7 +50,7 @@ public class MainWindow extends Window
 
 		setBorder(new Border.Invisible());
 
-		Panel contentPane = new Panel();
+		final Panel contentPane = new Panel();
 		contentPane.setLayoutManager(new BorderLayout());
 		contentPane.addComponent(this.header, BorderLayout.TOP);
 		contentPane.addComponent(this.directoryPanel, BorderLayout.CENTER);
@@ -76,8 +76,8 @@ public class MainWindow extends Window
 			@Override
 			public void doAction()
 			{
-				directoryPanel.updateDirectory(MainWindow.this, searchRoot);
-				footer.updateSearchRoot(MainWindow.this, searchRoot);
+				MainWindow.this.directoryPanel.updateDirectory(MainWindow.this, searchRoot);
+				MainWindow.this.footer.updateSearchRoot(MainWindow.this, searchRoot);
 			}
 		});
 	}
@@ -85,7 +85,7 @@ public class MainWindow extends Window
 	@Override
 	public void onKeyPressed(final Key key)
 	{
-		if (controller.handleGlobalKeyPressed(this, key))
+		if (this.controller.handleGlobalKeyPressed(this, key))
 		{
 			return;
 		}
@@ -96,29 +96,29 @@ public class MainWindow extends Window
 			return;
 		}
 
-		Object selectedItem = directoryPanel.getListBox().getSelectedItem();
+		final Object selectedItem = this.directoryPanel.getListBox().getSelectedItem();
 
 		if (selectedItem == null)
 		{
-			MessageBox.showMessageBox(gui, "Error", "No item selected.");
+			MessageBox.showMessageBox(this.gui, "Error", "No item selected.");
 			return;
 		}
 
-		Displayable displayable = (Displayable) selectedItem;
+		final Displayable displayable = (Displayable) selectedItem;
 
-		Object reference = displayable.getReference();
+		final Object reference = displayable.getReference();
 
 		if (reference instanceof Directory)
 		{
-			controller.deleteDiretory((Directory) reference);
+			this.controller.deleteDiretory((Directory) reference);
 		}
-		else if (reference instanceof LocatedFileStatus)
+		else if (reference instanceof FileStatus)
 		{
-			controller.deleteFile(directoryPanel.getCurrentDirectory(), (LocatedFileStatus) reference);
+			this.controller.deleteFile(this.directoryPanel.getCurrentDirectory(), (FileStatus) reference);
 		}
 		else
 		{
-			MessageBox.showMessageBox(gui, "Error", "Can't delete this.");
+			MessageBox.showMessageBox(this.gui, "Error", "Can't delete this.");
 		}
 
 	}

@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 
 @Slf4j
@@ -25,24 +24,24 @@ public class HdfsScanner
 		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
 	}
 
-	public SearchRoot refresh(URI namenode) throws IOException
+	public SearchRoot refresh(final URI namenode) throws IOException
 	{
 		return refresh(namenode, null);
 	}
 
-	public SearchRoot refresh(URI searchUri, StatusCallback callback) throws IOException
+	public SearchRoot refresh(final URI searchUri, final StatusCallback callback) throws IOException
 	{
 		if (callback != null)
 		{
 			callback.onScanStarted(searchUri);
 		}
 
-		interrupted = false;
+		this.interrupted = false;
 
-		SearchRoot searchRoot = new SearchRoot(searchUri.toString());
+		final SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		walkThroughDirectories(callback, searchRoot, fileSystem.listStatus(new Path(searchUri)));
-		
+		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri)));
+
 		if (callback != null)
 		{
 			callback.onScanFinished(searchRoot);
@@ -50,17 +49,17 @@ public class HdfsScanner
 		return searchRoot;
 	}
 
-	private void walkThroughDirectories(StatusCallback callback, SearchRoot searchRoot, FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException
+	private void walkThroughDirectories(final StatusCallback callback, final SearchRoot searchRoot, final FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException
 	{
-		for (FileStatus fileStatus : listLocatedStatus)
+		for (final FileStatus fileStatus : listLocatedStatus)
 		{
 			if (fileStatus.isDirectory())
 			{
 				try
 				{
-					walkThroughDirectories(callback, searchRoot, fileSystem.listStatus(fileStatus.getPath()));
+					walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(fileStatus.getPath()));
 				}
-				catch (IOException e)
+				catch (final IOException e)
 				{
 					log.warn("Couldn't open directory {}. Exception: {}", fileStatus.getPath(), e.getMessage());
 				}
@@ -77,9 +76,9 @@ public class HdfsScanner
 
 	}
 
-	public boolean deleteDirectory(Directory directory) throws IOException
+	public boolean deleteDirectory(final Directory directory) throws IOException
 	{
-		boolean deleteSuccess = fileSystem.delete(new Path(directory.absolutDirectoryName()), true);
+		final boolean deleteSuccess = this.fileSystem.delete(new Path(directory.absolutDirectoryName()), true);
 
 		if (deleteSuccess)
 		{
@@ -89,9 +88,9 @@ public class HdfsScanner
 		return deleteSuccess;
 	}
 
-	public boolean deleteFile(Directory parent, LocatedFileStatus fileStatus) throws IOException
+	public boolean deleteFile(final Directory parent, final FileStatus fileStatus) throws IOException
 	{
-		boolean delete = fileSystem.delete(fileStatus.getPath(), false);
+		final boolean delete = this.fileSystem.delete(fileStatus.getPath(), false);
 
 		if (delete)
 		{
@@ -102,7 +101,7 @@ public class HdfsScanner
 
 	}
 
-	private void addFile(SearchRoot searchRoot, final FileStatus file)
+	private void addFile(final SearchRoot searchRoot, final FileStatus file)
 	{
 		final Path directorPath = file.getPath().getParent();
 
@@ -113,16 +112,16 @@ public class HdfsScanner
 
 	public void close()
 	{
-		interrupted = true;
+		this.interrupted = true;
 	}
 
 	public static interface StatusCallback
 	{
-		void onVisitFile(FileStatus next);
+		void onVisitFile(final FileStatus next);
 
-		void onScanFinished(SearchRoot searchRoot);
+		void onScanFinished(final SearchRoot searchRoot);
 
-		void onScanStarted(URI searchUri);
+		void onScanStarted(final URI searchUri);
 	}
 
 }
