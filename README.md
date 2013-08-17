@@ -19,8 +19,10 @@ It can scans folders on hdfs and procudes are cli like this:
    96.0KiB [          ]  proc_types.o
 ```
 
+Build Status:
+=======
 
-
+[![Build Status](https://travis-ci.org/d0x/nchadoop.png?branch=master)](https://travis-ci.org/d0x/nchadoop)
 
 License
 =======
