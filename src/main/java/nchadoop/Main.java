@@ -16,9 +16,10 @@
 package nchadoop;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 
+import nchadoop.cli.CliConfig;
+import nchadoop.cli.Parser;
 import nchadoop.fs.HdfsScanner;
 import nchadoop.ui.MainWindow;
 import nchadoop.ui.ScanningPopup;
@@ -28,12 +29,18 @@ import com.googlecode.lanterna.gui.GUIScreen;
 
 public class Main
 {
-	public static void main(final String... args) throws URISyntaxException, IOException, InterruptedException
+
+	public static void main(String... args) throws URISyntaxException, IOException, InterruptedException
 	{
-		final URI uri = new URI(args[0]);
+		CliConfig cliConfig = new Parser().parse(args);
+
+		if (cliConfig == null)
+		{
+			return;
+		}
 
 		// Create components
-		final HdfsScanner hdfsScanner = new HdfsScanner(uri, "hdfs");
+		final HdfsScanner hdfsScanner = new HdfsScanner(cliConfig.getDir(), "hdfs");
 
 		final GUIScreen guiScreen = TerminalFacade.createGUIScreen();
 		final MainWindow mainWindow = new MainWindow(guiScreen);
@@ -52,6 +59,6 @@ public class Main
 		controller.setScanningPopup(scanningPopup);
 		controller.setHdfsScanner(hdfsScanner);
 
-		controller.startScan(uri);
+		controller.startScan(cliConfig.getDir(), cliConfig.getFilter());
 	}
 }

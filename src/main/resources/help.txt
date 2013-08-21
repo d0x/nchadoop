@@ -1,0 +1,18 @@
+nchadoop [-h] [--user NAME} [[--exclude PATTERN]...] uri
+
+   -h                   This help message.
+   
+   --user NAME          Username that will be used to crawl the file system.
+   
+   --exclude PATTERN    Exclude files that match this POSIX Glob Pattern.
+                        This  argument  can  be  added multiple times to add more 
+                        patterns.
+                        
+   uri                  The URI to search. Like: - hdfs://carolin:8020/user/
+                                                 - file:///tmp/
+
+
+Example:
+
+    nchadoop --user hdfs --exclude *.hbase /usr
+    nchadoop --user hdfs --exclude *.hbase --exclude *.log /usr

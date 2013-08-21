@@ -25,7 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.GlobFilter;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.PathFilter;
 
 @Slf4j
 @Data
@@ -39,13 +41,15 @@ public class HdfsScanner
 		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
 	}
 
-	public SearchRoot refresh(final URI namenode) throws IOException
+	public SearchRoot refresh(final URI namenode, String... globFilter) throws IOException
 	{
-		return refresh(namenode, null);
+		return refresh(namenode, null, globFilter);
 	}
 
-	public SearchRoot refresh(final URI searchUri, final StatusCallback callback) throws IOException
+	public SearchRoot refresh(final URI searchUri, final StatusCallback callback, String... globFilter) throws IOException
 	{
+		PathFilter filter = convertToPathFilter(globFilter);
+
 		if (callback != null)
 		{
 			callback.onScanStarted(searchUri);
@@ -55,13 +59,33 @@ public class HdfsScanner
 
 		final SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri)));
+		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri), filter));
 
 		if (callback != null)
 		{
 			callback.onScanFinished(searchRoot);
 		}
 		return searchRoot;
+	}
+
+	private PathFilter convertToPathFilter(String[] globFilter) throws IOException
+	{
+		// TODO: Remove this one
+		PathFilter pathFilter = new PathFilter() {
+
+			@Override
+			public boolean accept(Path path)
+			{
+				return true;
+			}
+		};
+
+		for (String filterPattern : globFilter)
+		{
+			pathFilter = new GlobFilter(filterPattern, pathFilter);
+		}
+		
+		return pathFilter;
 	}
 
 	private void walkThroughDirectories(final StatusCallback callback, final SearchRoot searchRoot, final FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException

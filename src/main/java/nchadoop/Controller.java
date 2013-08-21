@@ -41,13 +41,13 @@ public class Controller
 	private ScanningPopup	scanningPopup;
 	private HdfsScanner		hdfsScanner;
 
-	public void startScan(final URI uri)
+	public void startScan(final URI uri, String[] globFilter)
 	{
 		this.mainWindow.init();
 
 		try
 		{
-			final SearchRoot searchRoot = this.hdfsScanner.refresh(uri, this.scanningPopup);
+			final SearchRoot searchRoot = this.hdfsScanner.refresh(uri, this.scanningPopup, globFilter);
 
 			this.mainWindow.updateSearchRoot(searchRoot);
 		}
