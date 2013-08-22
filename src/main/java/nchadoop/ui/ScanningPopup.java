@@ -18,6 +18,7 @@ package nchadoop.ui;
 import java.net.URI;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import nchadoop.Controller;
 import nchadoop.fs.HdfsScanner.StatusCallback;
 import nchadoop.fs.SearchRoot;
@@ -34,6 +35,7 @@ import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.input.Key;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ScanningPopup extends Window implements StatusCallback
 {
 	public static final String[]	SPINNER		= new String[]{"-", "\\", "|", "/"};

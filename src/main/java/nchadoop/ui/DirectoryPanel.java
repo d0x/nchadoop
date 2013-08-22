@@ -16,6 +16,7 @@
 package nchadoop.ui;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import nchadoop.fs.Directory;
 import nchadoop.ui.listbox.DirectoryListBox;
 
@@ -24,6 +25,7 @@ import com.googlecode.lanterna.gui.layout.LinearLayout;
 import com.sun.xml.internal.xsom.impl.util.DraconianErrorHandler;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class DirectoryPanel extends Panel
 {
 	private DirectoryLabel		currentFolderLabel	= new DirectoryLabel();

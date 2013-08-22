@@ -16,6 +16,7 @@
 package nchadoop.ui;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import nchadoop.Controller;
 import nchadoop.fs.Directory;
 import nchadoop.fs.SearchRoot;
@@ -36,6 +37,7 @@ import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.screen.Screen;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class MainWindow extends Window
 {
 	protected final GUIScreen		gui;
@@ -135,7 +137,6 @@ public class MainWindow extends Window
 		{
 			MessageBox.showMessageBox(this.gui, "Error", "Can't delete this.");
 		}
-
 	}
 
 	public void changeFolder(final Directory directory)

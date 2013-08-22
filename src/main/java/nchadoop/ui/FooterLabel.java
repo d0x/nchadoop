@@ -24,7 +24,6 @@ import com.googlecode.lanterna.gui.component.Label;
 
 public class FooterLabel extends Label
 {
-
 	public FooterLabel()
 	{
 		super("Loading...", true);

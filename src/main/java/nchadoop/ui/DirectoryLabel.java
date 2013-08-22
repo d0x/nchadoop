@@ -25,7 +25,6 @@ import com.googlecode.lanterna.gui.component.Label;
 
 public class DirectoryLabel extends Label
 {
-
 	public DirectoryLabel()
 	{
 		setAlignment(Alignment.LEFT_CENTER);
