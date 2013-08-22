@@ -8,14 +8,14 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <title>nchadoop by d0x</title>
+    <title>nchadoop hdfs://yournamenode:8020/ by d0x</title>
   </head>
 
   <body>
 
     <header>
       <div class="container">
-        <h1>nchadoop</h1>
+        <h1>nchadoop hdfs://yournamenode:8020/</h1>
         <h2>A commandline ncdu like file browser for Hadoop HDFS</h2>
 
         <section id="downloads">
@@ -29,45 +29,36 @@
     <div class="container">
       <section id="main_content">
         <h1>
-<a name="nchadoop-is-a-ncdu-like-file-browser-for-hadoop-to-identify-wasted-disc-space" class="anchor" href="#nchadoop-is-a-ncdu-like-file-browser-for-hadoop-to-identify-wasted-disc-space"><span class="octicon octicon-link"></span></a>nchadoop is a <em>ncdu</em> like file browser for Hadoop to identify wasted disc space</h1>
+<a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About</h1>
+
+<p>nchadoop is a <em>ncdu</em> like file browser for Hadoop to identify wasted disc space.</p>
 
 <p>It can scans folders on hdfs and procudes are cli like this:</p>
 
-<pre><code> --- /user/christian/thrift/
-                        /..
-   20.9MiB [##########]  libtestgencpp.a
-    6.5MiB [###       ]  DebugProtoTest_types.o
-    4.6MiB [##        ]  ThriftTest_types.o
-    3.9MiB [#         ]  Benchmark
-    1.3MiB [          ]  ThriftTest_extras.o
-    1.2MiB [          ]  DebugProtoTest_extras.o
-  728.0KiB [          ]  OptionalRequiredTest_types.o
-  560.0KiB [          ]  libprocessortest.a
-  252.0KiB [          ]  ChildService.o
-  216.0KiB [          ]  ParentService.o
-   96.0KiB [          ]  proc_types.o
+<p><img src="https://raw.github.com/d0x/nchadoop/gh-pages/images/screenshot.png" alt="Screenshot"></p>
+
+<p>Just download the tarball and start to browse your file system with:</p>
+
+<pre><code>nchadoop hdfs://yournamenode:8020/
 </code></pre>
 
 <h1>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
 
-<pre><code>Copyright 2013 Christian Schneider
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-</code></pre>
+<p>This project is licensed under the terms of the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p>
       </section>
     </div>
 
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-43427138-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
