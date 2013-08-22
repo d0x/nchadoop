@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
 public class Displayable implements Comparable<Displayable>
 {
 	private final MainWindow	mainWindow;
+	private final Directory		parent;
 	private final Directory		target;
 	private final String		name;
 	private final long			size;
@@ -63,6 +64,14 @@ public class Displayable implements Comparable<Displayable>
 		if (target != null)
 		{
 			this.mainWindow.changeFolder(this.target);
+		}
+	}
+
+	public void navigateToParent()
+	{
+		if (parent != null)
+		{
+			this.mainWindow.changeFolder(parent);
 		}
 	}
 

@@ -1,5 +1,7 @@
-nchadoop is a *ncdu* like file browser for Hadoop to identify wasted disc space
-===============================================================================
+About [![Build Status](https://travis-ci.org/d0x/nchadoop.png?branch=master)](https://travis-ci.org/d0x/nchadoop)
+======
+
+nchadoop is a *ncdu* like file browser for Hadoop to identify wasted disc space.
 
 It can scans folders on hdfs and procudes are cli like this:
 
@@ -19,10 +21,6 @@ It can scans folders on hdfs and procudes are cli like this:
    96.0KiB [          ]  proc_types.o
 ```
 
-Build Status:
-=======
-
-[![Build Status](https://travis-ci.org/d0x/nchadoop.png?branch=master)](https://travis-ci.org/d0x/nchadoop)
 
 License
 =======

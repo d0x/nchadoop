@@ -29,7 +29,6 @@ import com.googlecode.lanterna.gui.GUIScreen;
 
 public class Main
 {
-
 	public static void main(String... args) throws URISyntaxException, IOException, InterruptedException
 	{
 		CliConfig cliConfig = new Parser().parse(args);

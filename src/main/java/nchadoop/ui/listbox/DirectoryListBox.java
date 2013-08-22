@@ -23,11 +23,13 @@ import nchadoop.fs.Directory;
 import nchadoop.ui.MainWindow;
 
 import org.apache.hadoop.fs.FileStatus;
+import org.mockito.internal.stubbing.answers.Returns;
 
 import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.Theme;
 import com.googlecode.lanterna.gui.component.AbstractListBox;
 import com.googlecode.lanterna.input.Key;
+import com.googlecode.lanterna.input.Key.Kind;
 import com.googlecode.lanterna.terminal.TerminalPosition;
 
 public class DirectoryListBox extends AbstractListBox
@@ -51,12 +53,12 @@ public class DirectoryListBox extends AbstractListBox
 
 		for (final Directory folder : directory.getDirectories())
 		{
-			items.add(new Displayable(ncWindow, folder, "/" + folder.getName(), folder.getSize(), folder));
+			items.add(new Displayable(ncWindow, directory.getParent(), folder, "/" + folder.getName(), folder.getSize(), folder));
 		}
 
 		for (final FileStatus file : directory.getFiles())
 		{
-			items.add(new Displayable(ncWindow, null, file.getPath().getName(), file.getLen(), file));
+			items.add(new Displayable(ncWindow, directory.getParent(), null, file.getPath().getName(), file.getLen(), file));
 		}
 
 		Collections.sort(items);
@@ -68,7 +70,7 @@ public class DirectoryListBox extends AbstractListBox
 
 		if (!directory.isRoot())
 		{
-			items.add(0, new Displayable(ncWindow, directory.getParent(), "/..", -1, null));
+			items.add(0, new Displayable(ncWindow, directory.getParent(), directory.getParent(), "/..", -1, null));
 		}
 
 		for (final Displayable displayable : items)
@@ -100,17 +102,46 @@ public class DirectoryListBox extends AbstractListBox
 	}
 
 	@Override
-	protected Result unhandledKeyboardEvent(final Key key)
+	public Result keyboardInteraction(Key key)
 	{
-		if (key.getKind() == Key.Kind.Enter)
+		final Displayable selectedItem = (Displayable) getSelectedItem();
+
+		switch (key.getKind())
 		{
-			final Displayable selectedItem = (Displayable) getSelectedItem();
+			case Enter:
+			case ArrowRight:
+				selectedItem.navigate();
+				return Result.EVENT_HANDLED;
 
-			selectedItem.navigate();
+			case ArrowLeft:
+				selectedItem.navigateToParent();
+				return Result.EVENT_HANDLED;
 
-			return Result.EVENT_HANDLED;
+			default:
+				break;
 		}
-		return Result.EVENT_NOT_HANDLED;
+
+		switch (key.getCharacter())
+		{
+			case 'l':
+				selectedItem.navigate();
+				return Result.EVENT_HANDLED;
+
+			case 'h':
+				selectedItem.navigateToParent();
+				return Result.EVENT_HANDLED;
+
+			case 'k':
+				return super.keyboardInteraction(new Key(Kind.ArrowUp));
+
+			case 'j':
+				return super.keyboardInteraction(new Key(Kind.ArrowDown));
+
+			default:
+				break;
+		}
+
+		return super.keyboardInteraction(key);
 	}
 
 	@Override
