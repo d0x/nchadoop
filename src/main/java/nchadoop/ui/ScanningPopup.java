@@ -79,13 +79,13 @@ public class ScanningPopup extends Window implements StatusCallback
 
 	public void show()
 	{
-		new Thread(new Runnable() {
+		gui.runInEventThread(new Action() {
 			@Override
-			public void run()
+			public void doAction()
 			{
 				ScanningPopup.this.gui.showWindow(ScanningPopup.this, Position.CENTER);
 			}
-		}).start();
+		});
 	}
 
 	@Override
