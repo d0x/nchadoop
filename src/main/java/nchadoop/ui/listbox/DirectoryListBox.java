@@ -23,7 +23,6 @@ import nchadoop.fs.Directory;
 import nchadoop.ui.MainWindow;
 
 import org.apache.hadoop.fs.FileStatus;
-import org.mockito.internal.stubbing.answers.Returns;
 
 import com.googlecode.lanterna.gui.TextGraphics;
 import com.googlecode.lanterna.gui.Theme;
