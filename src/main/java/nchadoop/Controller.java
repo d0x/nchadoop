@@ -54,7 +54,7 @@ public class Controller
 		catch (final Exception e)
 		{
 			this.scanningPopup.close();
-			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e);
+			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
 			shutdown();
 		}
 	}
