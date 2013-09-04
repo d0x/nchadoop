@@ -38,7 +38,7 @@ public class SearchRoot extends Directory
 		final String rootPath = new Path(this.name).toUri().getPath();
 		final String currentPath = path.toUri().getPath();
 
-		if (path.isRoot() || rootPath.equals(currentPath))
+		if (path.getParent() == null || rootPath.equals(currentPath))
 		{
 			this.totalDiskUsage += size;
 			this.totalFiles++;
