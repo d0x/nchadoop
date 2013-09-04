@@ -123,12 +123,10 @@ public class DirectoryListBox extends AbstractListBox
 		switch (key.getCharacter())
 		{
 			case 'l':
-				selectedItem.navigate();
-				return Result.EVENT_HANDLED;
+				return super.keyboardInteraction(new Key(Kind.ArrowRight));
 
 			case 'h':
-				selectedItem.navigateToParent();
-				return Result.EVENT_HANDLED;
+				return super.keyboardInteraction(new Key(Kind.ArrowLeft));
 
 			case 'k':
 				return super.keyboardInteraction(new Key(Kind.ArrowUp));

@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import nchadoop.cli.CliConfig;
 import nchadoop.cli.Parser;
 import nchadoop.fs.HdfsScanner;
+import nchadoop.ui.HelpPopup;
 import nchadoop.ui.MainWindow;
 import nchadoop.ui.ScanningPopup;
 
@@ -43,18 +44,19 @@ public class Main
 
 		final GUIScreen guiScreen = TerminalFacade.createGUIScreen();
 		final MainWindow mainWindow = new MainWindow(guiScreen);
-		final ScanningPopup scanningPopup = new ScanningPopup();
+		final HelpPopup helpPopup = new HelpPopup(guiScreen);
+		final ScanningPopup scanningPopup = new ScanningPopup(guiScreen);
 
 		final Controller controller = new Controller();
 
 		// wire them
 		mainWindow.setController(controller);
 
-		scanningPopup.setGui(guiScreen);
 		scanningPopup.setController(controller);
 
 		controller.setGuiScreen(guiScreen);
 		controller.setMainWindow(mainWindow);
+		controller.setHelpPopup(helpPopup);
 		controller.setScanningPopup(scanningPopup);
 		controller.setHdfsScanner(hdfsScanner);
 

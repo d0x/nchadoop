@@ -1,0 +1,9 @@
+
+ up, j            Move cursor up
+ down, k          Move cursor down
+ right, enter, l  Open selected directory
+ left, h          Open parent directory
+ 
+ d                Delete selected file or directory
+ q, esc           Quit nchadoop
+ 

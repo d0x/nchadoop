@@ -22,6 +22,7 @@ import lombok.Data;
 import nchadoop.fs.Directory;
 import nchadoop.fs.HdfsScanner;
 import nchadoop.fs.SearchRoot;
+import nchadoop.ui.HelpPopup;
 import nchadoop.ui.MainWindow;
 import nchadoop.ui.ScanningPopup;
 
@@ -38,6 +39,7 @@ public class Controller
 {
 	private GUIScreen		guiScreen;
 	private MainWindow		mainWindow;
+	private HelpPopup		helpPopup;
 	private ScanningPopup	scanningPopup;
 	private HdfsScanner		hdfsScanner;
 
@@ -63,6 +65,7 @@ public class Controller
 	{
 		this.scanningPopup.close();
 		this.mainWindow.close();
+		this.helpPopup.close();
 		this.guiScreen.getScreen().stopScreen();
 		this.hdfsScanner.close();
 	}
@@ -72,6 +75,11 @@ public class Controller
 		if (key.getCharacter() == 'q' || key.getKind() == Kind.Escape)
 		{
 			shutdown();
+			return true;
+		}
+		else if (key.getCharacter() == '?')
+		{
+			helpPopup.show();
 			return true;
 		}
 

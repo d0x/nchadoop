@@ -40,7 +40,7 @@ public class ScanningPopup extends Window implements StatusCallback
 {
 	public static final String[]	SPINNER		= new String[]{"-", "\\", "|", "/"};
 
-	private GUIScreen				gui;
+	private final GUIScreen			guiScreen;
 	private Controller				controller;
 
 	private final Thread			updateThread;
@@ -56,9 +56,11 @@ public class ScanningPopup extends Window implements StatusCallback
 	private long					totalSize	= 0;
 	private long					fileCount	= 0;
 
-	public ScanningPopup()
+	public ScanningPopup(final GUIScreen guiScreen)
 	{
 		super("Scanning...");
+
+		this.guiScreen = guiScreen;
 
 		final Panel panel = new Panel(Panel.Orientation.HORISONTAL);
 		panel.addComponent(new Label("Please wait until the directories are scanned."));
@@ -81,11 +83,11 @@ public class ScanningPopup extends Window implements StatusCallback
 
 	public void show()
 	{
-		gui.runInEventThread(new Action() {
+		guiScreen.runInEventThread(new Action() {
 			@Override
 			public void doAction()
 			{
-				ScanningPopup.this.gui.showWindow(ScanningPopup.this, Position.CENTER);
+				ScanningPopup.this.guiScreen.showWindow(ScanningPopup.this, Position.CENTER);
 			}
 		});
 	}
@@ -104,7 +106,7 @@ public class ScanningPopup extends Window implements StatusCallback
 	{
 		isClosed = true;
 		super.close();
-		this.gui.invalidate();
+		this.guiScreen.invalidate();
 	}
 
 	@Override
