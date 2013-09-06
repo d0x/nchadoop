@@ -22,7 +22,7 @@ import nchadoop.Utils;
 import nchadoop.fs.Directory;
 import nchadoop.ui.MainWindow;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class Displayable implements Comparable<Displayable>
@@ -43,7 +43,7 @@ public class Displayable implements Comparable<Displayable>
 
 	public String formatDisplayText(final int width, final long maximumSize)
 	{
-		final String readableSize = StringUtils.leftPad(Utils.readableFileSize(this.size), 9);
+		final String readableSize = StringUtils.leftPad(Utils.readableFileSize(this.size), 10);
 		final String guage = createGuage(this.size, maximumSize);
 
 		return StringUtils.rightPad(MessageFormat.format("{0} {1} {2}", readableSize, guage, this.name), width);
