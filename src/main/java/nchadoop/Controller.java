@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import nchadoop.fs.Directory;
 import nchadoop.fs.HdfsScanner;
 import nchadoop.fs.SearchRoot;
@@ -35,6 +36,7 @@ import com.googlecode.lanterna.input.Key;
 import com.googlecode.lanterna.input.Key.Kind;
 
 @Data
+@Slf4j
 public class Controller
 {
 	private GUIScreen		guiScreen;
@@ -56,7 +58,8 @@ public class Controller
 		catch (final Exception e)
 		{
 			this.scanningPopup.close();
-			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
+			log.error("Can't finish scan.", e);
+			MessageBox.showMessageBox(this.guiScreen, "Error", Utils.wrapLines("Error: " + e.getMessage(), 50));
 			shutdown();
 		}
 	}

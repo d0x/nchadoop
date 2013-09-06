@@ -22,8 +22,7 @@ import nchadoop.ui.listbox.DirectoryListBox;
 
 import com.googlecode.lanterna.gui.component.Panel;
 import com.googlecode.lanterna.gui.layout.LinearLayout;
-import com.sun.xml.internal.xsom.impl.util.DraconianErrorHandler;
-
+ 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DirectoryPanel extends Panel

@@ -15,11 +15,8 @@
  ******************************************************************************/
 package nchadoop;
 
+import java.text.BreakIterator;
 import java.text.DecimalFormat;
-
-import nchadoop.fs.Directory;
-
-import org.apache.hadoop.fs.LocatedFileStatus;
 
 public class Utils
 {
@@ -42,5 +39,31 @@ public class Utils
 		final int digitGroup = (int) (Math.log10(size) / Math.log10(1024));
 
 		return DECIMAL_FORMAT.format(size / Math.pow(1024, digitGroup)) + " " + UNITS[digitGroup];
+	}
+
+	public static String wrapLines(String target, int maxLength)
+	{
+		StringBuilder builder = new StringBuilder();
+		BreakIterator boundary = BreakIterator.getLineInstance();
+		boundary.setText(target);
+		int start = boundary.first();
+		int end = boundary.next();
+		int lineLength = 0;
+
+		while (end != BreakIterator.DONE)
+		{
+			String word = target.substring(start, end);
+			lineLength = lineLength + word.length();
+			if (lineLength >= maxLength)
+			{
+				builder.append('\n');
+				lineLength = word.length();
+			}
+			builder.append(word);
+			start = end;
+			end = boundary.next();
+		}
+
+		return builder.toString();
 	}
 }
