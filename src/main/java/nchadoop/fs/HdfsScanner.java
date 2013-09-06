@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.GlobFilter;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
 
@@ -38,7 +37,10 @@ public class HdfsScanner
 
 	public HdfsScanner(final URI namenode, final String user) throws IOException, InterruptedException
 	{
-		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
+		Configuration configuration = new Configuration();
+		configuration.set("fs.default.name", namenode.toString());
+		
+		this.fileSystem = FileSystem.get(configuration);
 	}
 
 	public SearchRoot refresh(final URI namenode, String... globFilter) throws IOException
@@ -59,7 +61,7 @@ public class HdfsScanner
 
 		final SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri), filter));
+		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri.toString()), filter));
 
 		if (callback != null)
 		{
@@ -80,10 +82,11 @@ public class HdfsScanner
 			}
 		};
 
-		for (String filterPattern : globFilter)
-		{
-			pathFilter = new GlobFilter(filterPattern, pathFilter);
-		}
+// TODO: Enable this again.
+//		for (String filterPattern : globFilter)
+//		{
+//			pathFilter = new GlobFilter(filterPattern, pathFilter);
+//		}
 		
 		return pathFilter;
 	}
@@ -92,7 +95,7 @@ public class HdfsScanner
 	{
 		for (final FileStatus fileStatus : listLocatedStatus)
 		{
-			if (fileStatus.isDirectory())
+			if (fileStatus.isDir())
 			{
 				try
 				{

@@ -67,8 +67,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<slf4j.version>1.6.4</slf4j.version>
 		<logback.version>1.0.1</logback.version>
-		<hadoop.version.generic>2.0.0-cdh4.2.0</hadoop.version.generic>
-		<hadoop.version.mr1>2.0.0-mr1-cdh4.2.0</hadoop.version.mr1>
+		<hadoop.version.generic>0.20.2</hadoop.version.generic>
 	</properties>
 
 	<dependencies>
@@ -101,34 +100,8 @@
 
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-common</artifactId>
+			<artifactId>hadoop-core</artifactId>
 			<version>${hadoop.version.generic}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>log4j</artifactId>
-					<groupId>log4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-hdfs</artifactId>
-			<version>${hadoop.version.generic}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-tools</artifactId>
-			<version>${hadoop.version.mr1}</version>
 		</dependency>
 
 		<dependency>
@@ -166,10 +139,6 @@
 	</dependencies>
 
 	<repositories>
-		<repository>
-			<id>cloudera</id>
-			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
-		</repository>
 		<repository>
 			<id>sonatype</id>
 			<url>https://oss.sonatype.org/content/groups/public/</url>
