@@ -3,7 +3,7 @@ About [![Build Status](https://travis-ci.org/d0x/nchadoop.png?branch=master)](ht
 
 nchadoop is a *ncdu* like file browser for Hadoop to identify wasted disc space.
 
-It can scans folders on hdfs and procudes are cli like this:
+It scans folders on hdfs and procudes a cli like this:
 
 ```
  --- /user/christian/thrift/
