@@ -22,23 +22,20 @@ import java.net.URI;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.PathFilter;
 
 @Slf4j
 @Data
 public class HdfsScanner
 {
-	private final FileSystem			fileSystem;
+	private final FileSystemAPI			fileSystem;
 	private boolean						interrupted;
-	private final GlobFilterConverter	globFilterConverter	= new GlobFilterConverter();
 
-	public HdfsScanner(final URI namenode, final String user) throws IOException, InterruptedException
+	public HdfsScanner(FileSystemAPI fileSystem, final URI namenode, final String user) throws IOException, InterruptedException
 	{
-		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
+		this.fileSystem = fileSystem;
+		this.fileSystem.init(namenode, user);
 	}
 
 	public SearchRoot refresh(final URI namenode, String... globFilter) throws IOException
@@ -48,8 +45,6 @@ public class HdfsScanner
 
 	public SearchRoot refresh(final URI searchUri, final StatusCallback callback, String... globFilter) throws IOException
 	{
-		PathFilter filter = globFilterConverter.toGlobFilter(globFilter);
-
 		if (callback != null)
 		{
 			callback.onScanStarted(searchUri);
@@ -59,7 +54,7 @@ public class HdfsScanner
 
 		final SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri), filter));
+		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(searchUri, globFilter));
 
 		if (callback != null)
 		{

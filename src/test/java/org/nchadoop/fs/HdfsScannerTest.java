@@ -52,7 +52,7 @@ public class HdfsScannerTest
 
 		this.namenode = new URI("file://" + this.testFolder.getTempDirectory().toString());
 
-		this.cut = new HdfsScanner(this.namenode, "hdfs");
+		this.cut = new HdfsScanner(new FileSystem(), this.namenode, "hdfs");
 
 		this.refresh = this.cut.refresh(this.namenode);
 	}
@@ -102,7 +102,7 @@ public class HdfsScannerTest
 	public void shouldStartAtSearchFolderWithoutProtocoll() throws FileNotFoundException, IOException, InterruptedException, URISyntaxException
 	{
 		this.namenode = new URI(this.testFolder.getTempDirectory().toString());
-		this.cut = new HdfsScanner(this.namenode, "hdfs");
+		this.cut = new HdfsScanner(new FileSystem(), this.namenode, "hdfs");
 		this.refresh = this.cut.refresh(this.namenode);
 
 		final List<Directory> directories = refresh.getDirectories();

@@ -17,14 +17,15 @@ package org.nchadoop;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ServiceLoader;
 
 import org.nchadoop.cli.CliConfig;
 import org.nchadoop.cli.Parser;
+import org.nchadoop.fs.FileSystemAPI;
 import org.nchadoop.fs.HdfsScanner;
 import org.nchadoop.ui.HelpPopup;
 import org.nchadoop.ui.MainWindow;
 import org.nchadoop.ui.ScanningPopup;
-
 
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.gui.GUIScreen;
@@ -41,7 +42,12 @@ public class Main
 		}
 
 		// Create components
-		final HdfsScanner hdfsScanner = new HdfsScanner(cliConfig.getDir(), "hdfs");
+		// TODO: Hide behind a "lookup" Service
+		ServiceLoader<FileSystemAPI> serviceLoader = ServiceLoader.load( FileSystemAPI.class );
+		
+		FileSystemAPI fileSystem = serviceLoader.iterator().next();
+		
+		final HdfsScanner hdfsScanner = new HdfsScanner(fileSystem, cliConfig.getDir(), "hdfs");
 
 		final GUIScreen guiScreen = TerminalFacade.createGUIScreen();
 		final MainWindow mainWindow = new MainWindow(guiScreen);
