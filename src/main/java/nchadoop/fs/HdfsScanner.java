@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.GlobFilter;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
 
@@ -33,8 +32,9 @@ import org.apache.hadoop.fs.PathFilter;
 @Data
 public class HdfsScanner
 {
-	private final FileSystem	fileSystem;
-	private boolean				interrupted;
+	private final FileSystem			fileSystem;
+	private boolean						interrupted;
+	private final GlobFilterConverter	globFilterConverter	= new GlobFilterConverter();
 
 	public HdfsScanner(final URI namenode, final String user) throws IOException, InterruptedException
 	{
@@ -48,7 +48,7 @@ public class HdfsScanner
 
 	public SearchRoot refresh(final URI searchUri, final StatusCallback callback, String... globFilter) throws IOException
 	{
-		PathFilter filter = convertToPathFilter(globFilter);
+		PathFilter filter = globFilterConverter.toGlobFilter(globFilter);
 
 		if (callback != null)
 		{
@@ -66,26 +66,6 @@ public class HdfsScanner
 			callback.onScanFinished(searchRoot);
 		}
 		return searchRoot;
-	}
-
-	private PathFilter convertToPathFilter(String[] globFilter) throws IOException
-	{
-		// TODO: Remove this one
-		PathFilter pathFilter = new PathFilter() {
-
-			@Override
-			public boolean accept(Path path)
-			{
-				return true;
-			}
-		};
-
-		for (String filterPattern : globFilter)
-		{
-			pathFilter = new GlobFilter(filterPattern, pathFilter);
-		}
-		
-		return pathFilter;
 	}
 
 	private void walkThroughDirectories(final StatusCallback callback, final SearchRoot searchRoot, final FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException
