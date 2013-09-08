@@ -1,3 +1,5 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 <!--
   Copyright 2013 Christian Schneider
   
@@ -13,14 +15,24 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.nchadoop</groupId>
-	<artifactId>org.nchadoop</artifactId>
+	<artifactId>nchadoop</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
+
+	<name>nchadoop</name>
+	<description>
+		nchadoop is a ncdu like file browser for Hadoop to identify wasted disc space.
+	</description>
+	<url>http://nchadoop.org</url>
+
+	<modules>
+		<module>nchadoop-core</module>
+		<module>nchadoop-assembly</module>
+	</modules>
 
 	<issueManagement>
 		<url>https://github.com/d0x/nchadoop/issues</url>
@@ -67,12 +79,19 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<slf4j.version>1.6.4</slf4j.version>
 		<logback.version>1.0.1</logback.version>
-		<hadoop.version.generic>2.0.0-cdh4.2.0</hadoop.version.generic>
-		<hadoop.version.mr1>2.0.0-mr1-cdh4.2.0</hadoop.version.mr1>
+		<maven.assembly.version>2.4</maven.assembly.version>
 	</properties>
 
+	<!-- Forced dependencies for all child projects -->
 	<dependencies>
-
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>0.12.0</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Testing -->
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
@@ -87,57 +106,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.googlecode.lanterna</groupId>
-			<artifactId>lanterna</artifactId>
-			<version>2.1.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-common</artifactId>
-			<version>${hadoop.version.generic}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>log4j</artifactId>
-					<groupId>log4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-hdfs</artifactId>
-			<version>${hadoop.version.generic}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-tools</artifactId>
-			<version>${hadoop.version.mr1}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>0.12.0</version>
-			<scope>provided</scope>
-		</dependency>
-
+		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -155,30 +124,105 @@
 			<artifactId>logback-core</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
-
-		<!-- Command Line parser -->
-		<dependency>
-			<groupId>com.beust</groupId>
-			<artifactId>jcommander</artifactId>
-			<version>1.30</version>
-		</dependency>
-
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>cloudera</id>
-			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
-		</repository>
-		<repository>
-			<id>sonatype</id>
-			<url>https://oss.sonatype.org/content/groups/public/</url>
-		</repository>
-	</repositories>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.googlecode.lanterna</groupId>
+				<artifactId>lanterna</artifactId>
+				<version>2.1.6</version>
+			</dependency>
+
+			<!-- Command Line parser -->
+			<dependency>
+				<groupId>com.beust</groupId>
+				<artifactId>jcommander</artifactId>
+				<version>1.30</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+		<!-- 
+			profile for building against Hadoop CDH4.2.0 Activate using:
+		    mvn -Dhadoop.profile=CDH4.2.0
+		 -->
+		<profile>
+			<id>hadoop-cdh4.2.0</id>
+			<activation>
+				<property>
+					<name>!hadoop.profile</name>
+<!-- 					<name>hadoop.profile</name> -->
+<!-- 					<value>cdh4.2.0</value> -->
+				</property>
+			</activation>
+
+			<modules>
+				<module>nchadoop-cdh4.2.0</module>
+			</modules>
+
+			<properties>
+				<hadoop.version.generic>2.0.0-cdh4.2.0</hadoop.version.generic>
+				<hadoop.version.mr1>2.0.0-mr1-cdh4.2.0</hadoop.version.mr1>
+				<assembly.file>src/assembly/hadoop-cdh4.2.0-compat.xml</assembly.file>
+			</properties>
+
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-common</artifactId>
+						<version>${hadoop.version.generic}</version>
+						<exclusions>
+							<exclusion>
+								<artifactId>log4j</artifactId>
+								<groupId>log4j</groupId>
+							</exclusion>
+							<exclusion>
+								<artifactId>slf4j-log4j12</artifactId>
+								<groupId>org.slf4j</groupId>
+							</exclusion>
+							<exclusion>
+								<artifactId>junit</artifactId>
+								<groupId>junit</groupId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+
+					<dependency>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-hdfs</artifactId>
+						<version>${hadoop.version.generic}</version>
+					</dependency>
+
+					<dependency>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-tools</artifactId>
+						<version>${hadoop.version.mr1}</version>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+
+			<repositories>
+				<repository>
+					<id>cloudera</id>
+					<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+				</repository>
+			</repositories>
+		</profile>
+
+	</profiles>
 
 	<build>
 		<plugins>
-
 			<!-- To specify the Java Version -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -186,6 +230,16 @@
 				<configuration>
 					<source>${java-version}</source>
 					<target>${java-version}</target>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+
+			<plugin>
+        		<!-- Disable Assembly. We build in nchadoop-assembly -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven.assembly.version}</version>
+				<configuration>
+					<skipAssembly>true</skipAssembly>
 				</configuration>
 			</plugin>
 
@@ -198,78 +252,23 @@
 				</configuration>
 			</plugin>
 
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.codehaus.mojo</groupId> -->
+<!-- 				<artifactId>appassembler-maven-plugin</artifactId> -->
+<!-- 				<version>1.4</version> -->
+<!-- 				<configuration> -->
+<!-- 					<programs> -->
+<!-- 						<program> -->
+<!-- 							<mainClass>${mainClass}</mainClass> -->
+<!-- 							<name>nchadoop</name> -->
+<!-- 						</program> -->
+<!-- 					</programs> -->
 
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.4.1</version>
-				<configuration>
-					<useReleaseProfile>false</useReleaseProfile>
-					<releaseProfiles>release</releaseProfiles>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
-			</plugin>
-
-
-			<!-- IDE -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.4</version>
-				<configuration>
-					<programs>
-						<program>
-							<mainClass>${mainClass}</mainClass>
-							<name>nchadoop</name>
-						</program>
-					</programs>
-
-					<extraJvmArguments>-Djava.awt.headless=true</extraJvmArguments>
-				</configuration>
-			</plugin>
+<!-- 					<extraJvmArguments>-Djava.awt.headless=true</extraJvmArguments> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 
 </project>

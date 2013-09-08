@@ -21,6 +21,12 @@ It scans folders on hdfs and procudes a cli like this:
    96.0KiB [          ]  proc_types.o
 ```
 
+Developer Info
+==============
+
+Currently nchadoop supports CDH4.2.0 only. There is already a compatibility layer ("compat") in created.
+Various distributions will follow.
+
 
 License
 =======
