@@ -33,6 +33,20 @@
 	</description>
 
 	<packaging>pom</packaging>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.nchadoop</groupId>
+			<artifactId>nchadoop-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nchadoop</groupId>
+			<artifactId>${compat.module}</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -47,6 +61,7 @@
 					<attach>false</attach>
 					<tarLongFileMode>gnu</tarLongFileMode>
 					<descriptors>
+						<!-- Specified by the profile from the parent pom -->
 						<descriptor>${assembly.file}</descriptor>
 					</descriptors>
 				</configuration>

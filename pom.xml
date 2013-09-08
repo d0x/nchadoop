@@ -173,6 +173,7 @@
 				<hadoop.version.generic>2.0.0-cdh4.2.0</hadoop.version.generic>
 				<hadoop.version.mr1>2.0.0-mr1-cdh4.2.0</hadoop.version.mr1>
 				<assembly.file>src/assembly/hadoop-cdh4.2.0-compat.xml</assembly.file>
+				<compat.module>nchadoop-cdh4.2.0</compat.module>
 			</properties>
 
 			<dependencyManagement>
