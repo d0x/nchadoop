@@ -39,97 +39,97 @@ import com.googlecode.lanterna.input.Key.Kind;
 @Slf4j
 public class Controller
 {
-	private GUIScreen		guiScreen;
-	private MainWindow		mainWindow;
-	private HelpPopup		helpPopup;
-	private ScanningPopup	scanningPopup;
-	private HdfsScanner		hdfsScanner;
+    private GUIScreen     guiScreen;
+    private MainWindow    mainWindow;
+    private HelpPopup     helpPopup;
+    private ScanningPopup scanningPopup;
+    private HdfsScanner   hdfsScanner;
 
-	public void startScan(final URI uri, String[] globFilter)
-	{
-		this.mainWindow.init();
+    public void startScan(final URI uri, String[] globFilter)
+    {
+        this.mainWindow.init();
 
-		try
-		{
-			final SearchRoot searchRoot = this.hdfsScanner.refresh(uri, this.scanningPopup, globFilter);
+        try
+        {
+            final SearchRoot searchRoot = this.hdfsScanner.refresh(uri, this.scanningPopup, globFilter);
 
-			this.mainWindow.updateSearchRoot(searchRoot);
-		}
-		catch (final Exception e)
-		{
-			this.scanningPopup.close();
-			log.error("Can't finish scan.", e);
-			MessageBox.showMessageBox(this.guiScreen, "Error", Utils.wrapLines("Error: " + e.getMessage(), 50));
-			shutdown();
-		}
-	}
+            this.mainWindow.updateSearchRoot(searchRoot);
+        }
+        catch (final Exception e)
+        {
+            this.scanningPopup.close();
+            log.error("Can't finish scan.", e);
+            MessageBox.showMessageBox(this.guiScreen, "Error", Utils.wrapLines("Error: " + e.getMessage(), 50));
+            shutdown();
+        }
+    }
 
-	public void shutdown()
-	{
-		this.scanningPopup.close();
-		this.mainWindow.close();
-		this.helpPopup.close();
-		this.guiScreen.getScreen().stopScreen();
-		this.hdfsScanner.close();
-	}
+    public void shutdown()
+    {
+        this.scanningPopup.close();
+        this.mainWindow.close();
+        this.helpPopup.close();
+        this.guiScreen.getScreen().stopScreen();
+        this.hdfsScanner.close();
+    }
 
-	public boolean handleGlobalKeyPressed(final Window sender, final Key key)
-	{
-		if (key.getCharacter() == 'q' || key.getKind() == Kind.Escape)
-		{
-			shutdown();
-			return true;
-		}
-		else if (key.getCharacter() == '?')
-		{
-			helpPopup.show();
-			return true;
-		}
+    public boolean handleGlobalKeyPressed(final Window sender, final Key key)
+    {
+        if (key.getCharacter() == 'q' || key.getKind() == Kind.Escape)
+        {
+            shutdown();
+            return true;
+        }
+        else if (key.getCharacter() == '?')
+        {
+            helpPopup.show();
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public void deleteDiretory(final Directory directory)
-	{
-		if (directory.isRoot())
-		{
-			MessageBox.showMessageBox(this.guiScreen, "Error", "Couldn't the search root.");
-			return;
-		}
+    public void deleteDiretory(final Directory directory)
+    {
+        if (directory.isRoot())
+        {
+            MessageBox.showMessageBox(this.guiScreen, "Error", "Couldn't the search root.");
+            return;
+        }
 
-		try
-		{
-			if (!this.hdfsScanner.deleteDirectory(directory))
-			{
-				MessageBox.showMessageBox(this.guiScreen, "Error", "Couldn't delete this.");
-			}
-			else
-			{
-				this.mainWindow.changeFolder(directory.getParent());
-			}
-		}
-		catch (final IOException e)
-		{
-			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
-		}
-	}
+        try
+        {
+            if (!this.hdfsScanner.deleteDirectory(directory))
+            {
+                MessageBox.showMessageBox(this.guiScreen, "Error", "Couldn't delete this.");
+            }
+            else
+            {
+                this.mainWindow.changeFolder(directory.getParent());
+            }
+        }
+        catch (final IOException e)
+        {
+            MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
+        }
+    }
 
-	public void deleteFile(final Directory parent, final FileStatus file)
-	{
-		try
-		{
-			if (this.hdfsScanner.deleteFile(parent, file) == false)
-			{
-				throw new IOException("Couldn't delete this file");
-			}
-			else
-			{
-				this.mainWindow.changeFolder(parent);
-			}
-		}
-		catch (final IOException e)
-		{
-			MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
-		}
-	}
+    public void deleteFile(final Directory parent, final FileStatus file)
+    {
+        try
+        {
+            if (this.hdfsScanner.deleteFile(parent, file) == false)
+            {
+                throw new IOException("Couldn't delete this file");
+            }
+            else
+            {
+                this.mainWindow.changeFolder(parent);
+            }
+        }
+        catch (final IOException e)
+        {
+            MessageBox.showMessageBox(this.guiScreen, "Error", "Error: " + e.getMessage());
+        }
+    }
 }

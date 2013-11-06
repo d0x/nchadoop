@@ -32,44 +32,44 @@ import org.nchadoop.cli.Parser;
 public class ParserTest
 {
 
-	Parser	cut	= new Parser();
+    Parser cut = new Parser();
 
-	@Test
-	public void shouldHandleInvalidParameter() throws URISyntaxException, IOException
-	{
-		assertThat(cut.parse(new String[]{""}), is(nullValue()));
-		assertThat(cut.parse(null), is(nullValue()));
-	}
-	
-	@Test
-	public void shouldReadAllValues() throws URISyntaxException, IOException
-	{
-		String[] argv = {"--exclude", "*.jpg", "--exclude", "*.png", "file:///tmp"};
+    @Test
+    public void shouldHandleInvalidParameter() throws URISyntaxException, IOException
+    {
+        assertThat(cut.parse(new String[]{""}), is(nullValue()));
+        assertThat(cut.parse(null), is(nullValue()));
+    }
 
-		CliConfig cliConfig = cut.parse(argv);
+    @Test
+    public void shouldReadAllValues() throws URISyntaxException, IOException
+    {
+        String[] argv = {"--exclude", "*.jpg", "--exclude", "*.png", "file:///tmp"};
 
-		assertThat(cliConfig.help, is(false));
-		assertThat(cliConfig.getFilter(), arrayContainingInAnyOrder("*.jpg", "*.png"));
-		assertThat(cliConfig.getDir(), is(new URI(("file:///tmp"))));
-	}
+        CliConfig cliConfig = cut.parse(argv);
 
-	@Test
-	public void shouldReadJustDir() throws URISyntaxException, IOException
-	{
-		String[] argv = {"/tmp"};
+        assertThat(cliConfig.help, is(false));
+        assertThat(cliConfig.getFilter(), arrayContainingInAnyOrder("*.jpg", "*.png"));
+        assertThat(cliConfig.getDir(), is(new URI(("file:///tmp"))));
+    }
 
-		CliConfig cliConfig = cut.parse(argv);
+    @Test
+    public void shouldReadJustDir() throws URISyntaxException, IOException
+    {
+        String[] argv = {"/tmp"};
 
-		assertThat(cliConfig.help, is(false));
-		assertThat(cliConfig.getFilter(), is(emptyArray()));
-		assertThat(cliConfig.getDir(), is(new URI(("/tmp"))));
-	}
+        CliConfig cliConfig = cut.parse(argv);
 
-	@Test
-	public void shouldPrintHelp() throws URISyntaxException, IOException
-	{
-		assertThat(cut.parse(new String[]{"-h"}), is(nullValue()));
-		assertThat(cut.parse(new String[]{"--help"}), is(nullValue()));
-	}
+        assertThat(cliConfig.help, is(false));
+        assertThat(cliConfig.getFilter(), is(emptyArray()));
+        assertThat(cliConfig.getDir(), is(new URI(("/tmp"))));
+    }
+
+    @Test
+    public void shouldPrintHelp() throws URISyntaxException, IOException
+    {
+        assertThat(cut.parse(new String[]{"-h"}), is(nullValue()));
+        assertThat(cut.parse(new String[]{"--help"}), is(nullValue()));
+    }
 
 }

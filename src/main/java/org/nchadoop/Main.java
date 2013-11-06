@@ -25,42 +25,41 @@ import org.nchadoop.ui.HelpPopup;
 import org.nchadoop.ui.MainWindow;
 import org.nchadoop.ui.ScanningPopup;
 
-
 import com.googlecode.lanterna.TerminalFacade;
 import com.googlecode.lanterna.gui.GUIScreen;
 
 public class Main
 {
-	public static void main(String... args) throws URISyntaxException, IOException, InterruptedException
-	{
-		CliConfig cliConfig = new Parser().parse(args);
+    public static void main(String... args) throws URISyntaxException, IOException, InterruptedException
+    {
+        CliConfig cliConfig = new Parser().parse(args);
 
-		if (cliConfig == null)
-		{
-			return;
-		}
+        if (cliConfig == null)
+        {
+            return;
+        }
 
-		// Create components
-		final HdfsScanner hdfsScanner = new HdfsScanner(cliConfig.getDir(), "hdfs");
+        // Create components
+        final HdfsScanner hdfsScanner = new HdfsScanner(cliConfig.getDir(), "hdfs");
 
-		final GUIScreen guiScreen = TerminalFacade.createGUIScreen();
-		final MainWindow mainWindow = new MainWindow(guiScreen);
-		final HelpPopup helpPopup = new HelpPopup(guiScreen);
-		final ScanningPopup scanningPopup = new ScanningPopup(guiScreen);
+        final GUIScreen guiScreen = TerminalFacade.createGUIScreen();
+        final MainWindow mainWindow = new MainWindow(guiScreen);
+        final HelpPopup helpPopup = new HelpPopup(guiScreen);
+        final ScanningPopup scanningPopup = new ScanningPopup(guiScreen);
 
-		final Controller controller = new Controller();
+        final Controller controller = new Controller();
 
-		// wire them
-		mainWindow.setController(controller);
+        // wire them
+        mainWindow.setController(controller);
 
-		scanningPopup.setController(controller);
+        scanningPopup.setController(controller);
 
-		controller.setGuiScreen(guiScreen);
-		controller.setMainWindow(mainWindow);
-		controller.setHelpPopup(helpPopup);
-		controller.setScanningPopup(scanningPopup);
-		controller.setHdfsScanner(hdfsScanner);
+        controller.setGuiScreen(guiScreen);
+        controller.setMainWindow(mainWindow);
+        controller.setHelpPopup(helpPopup);
+        controller.setScanningPopup(scanningPopup);
+        controller.setHdfsScanner(hdfsScanner);
 
-		controller.startScan(cliConfig.getDir(), cliConfig.getFilter());
-	}
+        controller.startScan(cliConfig.getDir(), cliConfig.getFilter());
+    }
 }

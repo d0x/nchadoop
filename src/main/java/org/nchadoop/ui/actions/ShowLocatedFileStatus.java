@@ -26,13 +26,13 @@ import com.googlecode.lanterna.gui.dialog.MessageBox;
 @Data
 public class ShowLocatedFileStatus implements Action
 {
-	private final GUIScreen			owner;
-	private final LocatedFileStatus	file;
+    private final GUIScreen         owner;
+    private final LocatedFileStatus file;
 
-	@Override
-	public void doAction()
-	{
-		MessageBox.showMessageBox(this.owner, this.file.getPath().toString(), this.file.toString());
-	}
+    @Override
+    public void doAction()
+    {
+        MessageBox.showMessageBox(this.owner, this.file.getPath().toString(), this.file.toString());
+    }
 
 }

@@ -20,50 +20,50 @@ import java.text.DecimalFormat;
 
 public class Utils
 {
-	public static final String[]		UNITS			= new String[]{"B", "KB", "MB", "GB", "TB", "PB", "EB"};
-	public static final DecimalFormat	DECIMAL_FORMAT	= new DecimalFormat("#,##0.0");
+    public static final String[]      UNITS          = new String[]{"B", "KB", "MB", "GB", "TB", "PB", "EB"};
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.0");
 
-	private Utils()
-	{
-		// hide utility class constructor
-	}
+    private Utils()
+    {
+        // hide utility class constructor
+    }
 
-	public static String readableFileSize(final long size)
-	{
-		if (size < 0)
-			return "";
+    public static String readableFileSize(final long size)
+    {
+        if (size < 0)
+            return "";
 
-		if (size == 0)
-			return "0.0";
+        if (size == 0)
+            return "0.0";
 
-		final int digitGroup = (int) (Math.log10(size) / Math.log10(1024));
+        final int digitGroup = (int) (Math.log10(size) / Math.log10(1024));
 
-		return DECIMAL_FORMAT.format(size / Math.pow(1024, digitGroup)) + " " + UNITS[digitGroup];
-	}
+        return DECIMAL_FORMAT.format(size / Math.pow(1024, digitGroup)) + " " + UNITS[digitGroup];
+    }
 
-	public static String wrapLines(String target, int maxLength)
-	{
-		StringBuilder builder = new StringBuilder();
-		BreakIterator boundary = BreakIterator.getLineInstance();
-		boundary.setText(target);
-		int start = boundary.first();
-		int end = boundary.next();
-		int lineLength = 0;
+    public static String wrapLines(String target, int maxLength)
+    {
+        StringBuilder builder = new StringBuilder();
+        BreakIterator boundary = BreakIterator.getLineInstance();
+        boundary.setText(target);
+        int start = boundary.first();
+        int end = boundary.next();
+        int lineLength = 0;
 
-		while (end != BreakIterator.DONE)
-		{
-			String word = target.substring(start, end);
-			lineLength = lineLength + word.length();
-			if (lineLength >= maxLength)
-			{
-				builder.append('\n');
-				lineLength = word.length();
-			}
-			builder.append(word);
-			start = end;
-			end = boundary.next();
-		}
+        while (end != BreakIterator.DONE)
+        {
+            String word = target.substring(start, end);
+            lineLength = lineLength + word.length();
+            if (lineLength >= maxLength)
+            {
+                builder.append('\n');
+                lineLength = word.length();
+            }
+            builder.append(word);
+            start = end;
+            end = boundary.next();
+        }
 
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 }

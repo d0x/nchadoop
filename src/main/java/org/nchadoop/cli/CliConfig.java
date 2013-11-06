@@ -23,29 +23,29 @@ import com.beust.jcommander.Parameter;
 
 public class CliConfig
 {
-	@Parameter(names = {"-h","--help"})
-	public boolean		help;
+    @Parameter(names = {"-h", "--help"})
+    public boolean      help;
 
-	@Parameter(names = "--exclude")
-	public List<String>	filter;
+    @Parameter(names = "--exclude")
+    public List<String> filter;
 
-	@Parameter(description = "dirs")
-	public List<String>	dir;
+    @Parameter(description = "dirs")
+    public List<String> dir;
 
-	public URI getDir() throws URISyntaxException
-	{
-		if(dir == null || dir.isEmpty())
-		{
-			throw new URISyntaxException("", "Dir is empty");
-		}
-		return new URI(dir.get(0));
-	}
+    public URI getDir() throws URISyntaxException
+    {
+        if (dir == null || dir.isEmpty())
+        {
+            throw new URISyntaxException("", "Dir is empty");
+        }
+        return new URI(dir.get(0));
+    }
 
-	public String[] getFilter()
-	{
-		if (filter == null)
-			return new String[0];
+    public String[] getFilter()
+    {
+        if (filter == null)
+            return new String[0];
 
-		return filter.toArray(new String[0]);
-	}
+        return filter.toArray(new String[0]);
+    }
 }

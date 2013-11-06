@@ -21,36 +21,36 @@ import com.googlecode.lanterna.input.Key;
 @EqualsAndHashCode(callSuper = true)
 public class HelpPopup extends Window
 {
-	private final GUIScreen guiScreen;
-	
-	public HelpPopup(final GUIScreen guiScreen) throws IOException, URISyntaxException
-	{
-		super("Help");
-		
-		this.guiScreen = guiScreen;
+    private final GUIScreen guiScreen;
 
-		List<String> content = Files.readAllLines(Paths.get(HelpPopup.class.getClassLoader().getResource("helpPopup.txt").toURI()), Charset.forName("UTF8"));
-		
-		for (String line : content)
-		{
-			addComponent(new Label(line));
-		}
-	}
+    public HelpPopup(final GUIScreen guiScreen) throws IOException, URISyntaxException
+    {
+        super("Help");
 
-	public void show()
-	{
-		guiScreen.runInEventThread(new Action() {
-			@Override
-			public void doAction()
-			{
-				guiScreen.showWindow(HelpPopup.this, Position.CENTER);		
-			}
-		});
-	}
-	
-	@Override
-	public void onKeyPressed(Key key)
-	{
-		close();
-	}
+        this.guiScreen = guiScreen;
+
+        List<String> content = Files.readAllLines(Paths.get(HelpPopup.class.getClassLoader().getResource("helpPopup.txt").toURI()), Charset.forName("UTF8"));
+
+        for (String line : content)
+        {
+            addComponent(new Label(line));
+        }
+    }
+
+    public void show()
+    {
+        guiScreen.runInEventThread(new Action() {
+            @Override
+            public void doAction()
+            {
+                guiScreen.showWindow(HelpPopup.this, Position.CENTER);
+            }
+        });
+    }
+
+    @Override
+    public void onKeyPressed(Key key)
+    {
+        close();
+    }
 }

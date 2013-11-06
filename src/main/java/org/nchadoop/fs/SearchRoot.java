@@ -24,50 +24,50 @@ import org.apache.hadoop.fs.Path;
 @EqualsAndHashCode(callSuper = true)
 public class SearchRoot extends Directory
 {
-	private long	totalDiskUsage;
-	private long	totalFiles;
+    private long totalDiskUsage;
+    private long totalFiles;
 
-	public SearchRoot(final String name)
-	{
-		super(null, name);
-	}
+    public SearchRoot(final String name)
+    {
+        super(null, name);
+    }
 
-	public Directory addPath(final Path path, final long size)
-	{
-		// TODO: removed this "new Path()". maybe there is a more elegant way to check this.
-		final String rootPath = new Path(this.name).toUri().getPath();
-		final String currentPath = path.toUri().getPath();
+    public Directory addPath(final Path path, final long size)
+    {
+        // TODO: removed this "new Path()". maybe there is a more elegant way to check this.
+        final String rootPath = new Path(this.name).toUri().getPath();
+        final String currentPath = path.toUri().getPath();
 
-		if (path.getParent() == null || rootPath.equals(currentPath))
-		{
-			this.totalDiskUsage += size;
-			this.totalFiles++;
-			this.size += size;
-			return this;
-		}
+        if (path.getParent() == null || rootPath.equals(currentPath))
+        {
+            this.totalDiskUsage += size;
+            this.totalFiles++;
+            this.size += size;
+            return this;
+        }
 
-		final Directory parentDirectory = addPath(path.getParent(), size);
+        final Directory parentDirectory = addPath(path.getParent(), size);
 
-		final String pathName = path.getName();
+        final String pathName = path.getName();
 
-		Directory directory = parentDirectory.findDirectoryByName(pathName);
+        Directory directory = parentDirectory.findDirectoryByName(pathName);
 
-		if (directory == null)
-		{
-			directory = parentDirectory.addDirectory(pathName);
-		}
+        if (directory == null)
+        {
+            directory = parentDirectory.addDirectory(pathName);
+        }
 
-		directory.setSize(directory.getSize() + size);
+        directory.setSize(directory.getSize() + size);
 
-		return directory;
-	}
+        return directory;
+    }
 
-	@Override
-	protected void adjustSizeRecursive(final long correction)
-	{
-		super.adjustSizeRecursive(correction);
+    @Override
+    protected void adjustSizeRecursive(final long correction)
+    {
+        super.adjustSizeRecursive(correction);
 
-		this.totalDiskUsage += correction;
-	}
+        this.totalDiskUsage += correction;
+    }
 
 }

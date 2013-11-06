@@ -26,47 +26,47 @@ import com.beust.jcommander.JCommander;
 
 public class Parser
 {
-	public CliConfig parse(String[] args) throws IOException, URISyntaxException
-	{
-		if (args == null || args.length == 0)
-		{
-			printHelp();
-			return null;
-		}
-		
-		CliConfig config = new CliConfig();
+    public CliConfig parse(String[] args) throws IOException, URISyntaxException
+    {
+        if (args == null || args.length == 0)
+        {
+            printHelp();
+            return null;
+        }
 
-		JCommander jCommander = new JCommander(config, args);
+        CliConfig config = new CliConfig();
 
-		if (!jCommander.getUnknownOptions().isEmpty() || config.help || isDirInvalid(config))
-		{
-			printHelp();
-			return null;
-		}
+        JCommander jCommander = new JCommander(config, args);
 
-		return config;
-	}
+        if (!jCommander.getUnknownOptions().isEmpty() || config.help || isDirInvalid(config))
+        {
+            printHelp();
+            return null;
+        }
 
-	private boolean isDirInvalid(CliConfig config)
-	{
-		try
-		{
-			config.getDir();
-			return false;
-		}
-		catch (URISyntaxException e)
-		{
-			return true;
-		}
-	}
+        return config;
+    }
 
-	private void printHelp() throws IOException, URISyntaxException
-	{
-		List<String> readAllLines = Files.readAllLines(Paths.get(Parser.class.getClassLoader().getResource("help.txt").toURI()), Charset.forName("UTF8"));
-		for (String string : readAllLines)
-		{
-			System.out.println(string);
-		}
-	}
+    private boolean isDirInvalid(CliConfig config)
+    {
+        try
+        {
+            config.getDir();
+            return false;
+        }
+        catch (URISyntaxException e)
+        {
+            return true;
+        }
+    }
+
+    private void printHelp() throws IOException, URISyntaxException
+    {
+        List<String> readAllLines = Files.readAllLines(Paths.get(Parser.class.getClassLoader().getResource("help.txt").toURI()), Charset.forName("UTF8"));
+        for (String string : readAllLines)
+        {
+            System.out.println(string);
+        }
+    }
 
 }

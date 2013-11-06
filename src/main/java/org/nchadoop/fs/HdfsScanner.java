@@ -32,115 +32,115 @@ import org.apache.hadoop.fs.PathFilter;
 @Data
 public class HdfsScanner
 {
-	private final FileSystem			fileSystem;
-	private boolean						interrupted;
-	private final GlobFilterConverter	globFilterConverter	= new GlobFilterConverter();
+    private final FileSystem          fileSystem;
+    private boolean                   interrupted;
+    private final GlobFilterConverter globFilterConverter = new GlobFilterConverter();
 
-	public HdfsScanner(final URI namenode, final String user) throws IOException, InterruptedException
-	{
-		this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
-	}
+    public HdfsScanner(final URI namenode, final String user) throws IOException, InterruptedException
+    {
+        this.fileSystem = FileSystem.get(namenode, new Configuration(), user);
+    }
 
-	public SearchRoot refresh(final URI namenode, String... globFilter) throws IOException
-	{
-		return refresh(namenode, null, globFilter);
-	}
+    public SearchRoot refresh(final URI namenode, String... globFilter) throws IOException
+    {
+        return refresh(namenode, null, globFilter);
+    }
 
-	public SearchRoot refresh(final URI searchUri, final StatusCallback callback, String... globFilter) throws IOException
-	{
-		PathFilter filter = globFilterConverter.toGlobFilter(globFilter);
+    public SearchRoot refresh(final URI searchUri, final StatusCallback callback, String... globFilter) throws IOException
+    {
+        PathFilter filter = globFilterConverter.toGlobFilter(globFilter);
 
-		if (callback != null)
-		{
-			callback.onScanStarted(searchUri);
-		}
+        if (callback != null)
+        {
+            callback.onScanStarted(searchUri);
+        }
 
-		this.interrupted = false;
+        this.interrupted = false;
 
-		final SearchRoot searchRoot = new SearchRoot(searchUri.toString());
+        final SearchRoot searchRoot = new SearchRoot(searchUri.toString());
 
-		walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri), filter));
+        walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(new Path(searchUri), filter));
 
-		if (callback != null)
-		{
-			callback.onScanFinished(searchRoot);
-		}
-		return searchRoot;
-	}
+        if (callback != null)
+        {
+            callback.onScanFinished(searchRoot);
+        }
+        return searchRoot;
+    }
 
-	private void walkThroughDirectories(final StatusCallback callback, final SearchRoot searchRoot, final FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException
-	{
-		for (final FileStatus fileStatus : listLocatedStatus)
-		{
-			if (fileStatus.isDirectory())
-			{
-				try
-				{
-					walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(fileStatus.getPath()));
-				}
-				catch (final IOException e)
-				{
-					log.warn("Couldn't open directory {}. Exception: {}", fileStatus.getPath(), e.getMessage());
-				}
-			}
-			else
-			{
-				if (callback != null)
-				{
-					callback.onVisitFile(fileStatus);
-				}
-				addFile(searchRoot, fileStatus);
-			}
-		}
+    private void walkThroughDirectories(final StatusCallback callback, final SearchRoot searchRoot, final FileStatus[] listLocatedStatus) throws FileNotFoundException, IOException
+    {
+        for (final FileStatus fileStatus : listLocatedStatus)
+        {
+            if (fileStatus.isDirectory())
+            {
+                try
+                {
+                    walkThroughDirectories(callback, searchRoot, this.fileSystem.listStatus(fileStatus.getPath()));
+                }
+                catch (final IOException e)
+                {
+                    log.warn("Couldn't open directory {}. Exception: {}", fileStatus.getPath(), e.getMessage());
+                }
+            }
+            else
+            {
+                if (callback != null)
+                {
+                    callback.onVisitFile(fileStatus);
+                }
+                addFile(searchRoot, fileStatus);
+            }
+        }
 
-	}
+    }
 
-	public boolean deleteDirectory(final Directory directory) throws IOException
-	{
-		final boolean deleteSuccess = this.fileSystem.delete(new Path(directory.absolutDirectoryName()), true);
+    public boolean deleteDirectory(final Directory directory) throws IOException
+    {
+        final boolean deleteSuccess = this.fileSystem.delete(new Path(directory.absolutDirectoryName()), true);
 
-		if (deleteSuccess)
-		{
-			directory.remove();
-		}
+        if (deleteSuccess)
+        {
+            directory.remove();
+        }
 
-		return deleteSuccess;
-	}
+        return deleteSuccess;
+    }
 
-	public boolean deleteFile(final Directory parent, final FileStatus fileStatus) throws IOException
-	{
-		final boolean delete = this.fileSystem.delete(fileStatus.getPath(), false);
+    public boolean deleteFile(final Directory parent, final FileStatus fileStatus) throws IOException
+    {
+        final boolean delete = this.fileSystem.delete(fileStatus.getPath(), false);
 
-		if (delete)
-		{
-			parent.removeFile(fileStatus);
-		}
+        if (delete)
+        {
+            parent.removeFile(fileStatus);
+        }
 
-		return delete;
+        return delete;
 
-	}
+    }
 
-	private void addFile(final SearchRoot searchRoot, final FileStatus file)
-	{
-		final Path directorPath = file.getPath().getParent();
+    private void addFile(final SearchRoot searchRoot, final FileStatus file)
+    {
+        final Path directorPath = file.getPath().getParent();
 
-		final Directory directory = searchRoot.addPath(directorPath, file.getLen());
+        final Directory directory = searchRoot.addPath(directorPath, file.getLen());
 
-		directory.addFile(file);
-	}
+        directory.addFile(file);
+    }
 
-	public void close()
-	{
-		this.interrupted = true;
-	}
+    public void close()
+    {
+        this.interrupted = true;
+    }
 
-	public static interface StatusCallback
-	{
-		void onVisitFile(final FileStatus next);
+    public static interface StatusCallback
+    {
+        void onVisitFile(final FileStatus next);
 
-		void onScanFinished(final SearchRoot searchRoot);
+        void onScanFinished(final SearchRoot searchRoot);
 
-		void onScanStarted(final URI searchUri);
-	}
+        void onScanStarted(final URI searchUri);
+    }
 
 }

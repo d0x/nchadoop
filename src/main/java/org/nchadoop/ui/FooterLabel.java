@@ -20,34 +20,33 @@ import java.text.MessageFormat;
 import org.nchadoop.Utils;
 import org.nchadoop.fs.SearchRoot;
 
-
 import com.googlecode.lanterna.gui.component.Label;
 
 public class FooterLabel extends Label
 {
-	public FooterLabel()
-	{
-		super("Loading...", true);
+    public FooterLabel()
+    {
+        super("Loading...", true);
 
-		setAlignment(Alignment.LEFT_CENTER);
-	}
+        setAlignment(Alignment.LEFT_CENTER);
+    }
 
-	public void updateSearchRoot(final MainWindow mainWindow, final SearchRoot searchRoot)
-	{
-		String text;
+    public void updateSearchRoot(final MainWindow mainWindow, final SearchRoot searchRoot)
+    {
+        String text;
 
-		if (searchRoot == null)
-		{
-			text = "";
-		}
-		else
-		{
-			final String readableFileSize = Utils.readableFileSize(searchRoot.getTotalDiskUsage());
-			final long totalFiles = searchRoot.getTotalFiles();
+        if (searchRoot == null)
+        {
+            text = "";
+        }
+        else
+        {
+            final String readableFileSize = Utils.readableFileSize(searchRoot.getTotalDiskUsage());
+            final long totalFiles = searchRoot.getTotalFiles();
 
-			text = MessageFormat.format("Total disk usage {0} in {1} Files", readableFileSize, totalFiles);
-		}
+            text = MessageFormat.format("Total disk usage {0} in {1} Files", readableFileSize, totalFiles);
+        }
 
-		setText(text);
-	}
+        setText(text);
+    }
 }

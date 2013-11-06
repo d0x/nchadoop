@@ -29,93 +29,93 @@ import org.apache.hadoop.fs.Path;
 @Setter
 public class Directory
 {
-	protected final Directory	parent;
-	protected final String		name;
+    protected final Directory  parent;
+    protected final String     name;
 
-	protected List<Directory>	directories	= new ArrayList<>();
-	protected List<FileStatus>	files		= new ArrayList<>();
+    protected List<Directory>  directories = new ArrayList<>();
+    protected List<FileStatus> files       = new ArrayList<>();
 
-	protected long				size		= 0;
+    protected long             size        = 0;
 
-	public Directory(final Directory parent, final String name)
-	{
-		this.parent = parent;
-		this.name = StringUtils.removeEnd(name, "/");
-	}
+    public Directory(final Directory parent, final String name)
+    {
+        this.parent = parent;
+        this.name = StringUtils.removeEnd(name, "/");
+    }
 
-	public boolean isRoot()
-	{
-		return getParent() == null;
-	}
+    public boolean isRoot()
+    {
+        return getParent() == null;
+    }
 
-	public String absolutDirectoryName()
-	{
-		final StringBuilder builder = new StringBuilder();
+    public String absolutDirectoryName()
+    {
+        final StringBuilder builder = new StringBuilder();
 
-		Directory directory = this;
-		do
-		{
-			builder.insert(0, directory.name + "/");
-		} while ((directory = directory.getParent()) != null);
+        Directory directory = this;
+        do
+        {
+            builder.insert(0, directory.name + "/");
+        } while ((directory = directory.getParent()) != null);
 
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 
-	public Directory findDirectoryByName(final String name)
-	{
-		for (final Directory directory : this.directories)
-		{
-			if (StringUtils.equals(directory.name, name))
-			{
-				return directory;
-			}
-		}
-		return null;
-	}
+    public Directory findDirectoryByName(final String name)
+    {
+        for (final Directory directory : this.directories)
+        {
+            if (StringUtils.equals(directory.name, name))
+            {
+                return directory;
+            }
+        }
+        return null;
+    }
 
-	public Path toPath()
-	{
-		return new Path(absolutDirectoryName());
-	}
+    public Path toPath()
+    {
+        return new Path(absolutDirectoryName());
+    }
 
-	public void remove()
-	{
-		if (isRoot() == false)
-		{
-			this.parent.directories.remove(this);
-		}
+    public void remove()
+    {
+        if (isRoot() == false)
+        {
+            this.parent.directories.remove(this);
+        }
 
-		adjustSizeRecursive(this.size * -1);
-	}
+        adjustSizeRecursive(this.size * -1);
+    }
 
-	public void removeFile(final FileStatus file)
-	{
-		this.files.remove(file);
+    public void removeFile(final FileStatus file)
+    {
+        this.files.remove(file);
 
-		adjustSizeRecursive(file.getLen() * -1);
-	}
+        adjustSizeRecursive(file.getLen() * -1);
+    }
 
-	protected Directory addDirectory(final String name)
-	{
-		final Directory directory = new Directory(this, name);
+    protected Directory addDirectory(final String name)
+    {
+        final Directory directory = new Directory(this, name);
 
-		this.directories.add(directory);
+        this.directories.add(directory);
 
-		return directory;
-	}
+        return directory;
+    }
 
-	protected void addFile(final FileStatus file)
-	{
-		this.files.add(file);
-	}
+    protected void addFile(final FileStatus file)
+    {
+        this.files.add(file);
+    }
 
-	protected void adjustSizeRecursive(final long correction)
-	{
-		this.size += correction;
+    protected void adjustSizeRecursive(final long correction)
+    {
+        this.size += correction;
 
-		if (isRoot() == false)
-		{
-			this.parent.adjustSizeRecursive(correction);
-		}
-	}
+        if (isRoot() == false)
+        {
+            this.parent.adjustSizeRecursive(correction);
+        }
+    }
 }
