@@ -1,3 +1,10 @@
+Project Closed
+======
+
+Currently I have no time to keep it up and running.
+Don't try to run it with the current version of hadoop.
+
+
 About [![Build Status](https://travis-ci.org/d0x/nchadoop.png?branch=master)](https://travis-ci.org/d0x/nchadoop)
 ======
 
